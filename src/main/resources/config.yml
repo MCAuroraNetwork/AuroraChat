@@ -1,0 +1,10 @@
+firstJoinMessages:
+  default: Welcome to Aurora PvP!
+joinMessages:
+  default: Use /kits to select a kit, and /createkit to create a kit
+antispam:
+  enable: true
+  timeout: 180000
+  similarity: .80
+  max-violations: 6
+  violations-expire: 3
