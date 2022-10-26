@@ -15,10 +15,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
 
-public class SimilarMessages {
-  private static HashMap<UUID, Integer> violations = new HashMap<>();
+public class SimilarMessageBlocker {
+  private static final HashMap<UUID, Integer> violations = new HashMap<>();
 
-  public static boolean SimilarMessagesModule() {
+  public static boolean violationChecker() {
     if (analyzeMessage()) {
       if (violations.containsKey(p.getUniqueId())) {
         violations.put(p.getUniqueId(), violations.get(p.getUniqueId()) + 1);
@@ -55,7 +55,7 @@ public class SimilarMessages {
       }
     };
     executor.scheduleAtFixedRate(checkValues, 0, 15, TimeUnit.SECONDS);
-    Runnable clearViolations = () -> violations.clear();
+    Runnable clearViolations = violations::clear;
     executor.scheduleAtFixedRate(clearViolations, 0,
         ConfigHandler.get().getInt("antispam.violations-expire"), TimeUnit.MINUTES);
   }
