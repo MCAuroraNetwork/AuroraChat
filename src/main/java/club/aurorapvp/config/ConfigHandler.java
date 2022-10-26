@@ -9,21 +9,20 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigHandler {
-  private static File file = new File(DataFolder, "config.yml");
+  private static File file;
   private static FileConfiguration customFile;
 
-  // Finds or generates the custom config file
   public static void setup() {
-    file = new File(DataFolder, "config.yml");
+    file = new File(DataFolder, "lang.yml");
 
     if (!file.exists()) {
       try {
         file.createNewFile();
       } catch (IOException e) {
-        plugin.getLogger().warning("Couldn't create config");
+        plugin.getLogger().warning("Couldn't create lang.yml");
       }
     }
-    customFile = YamlConfiguration.loadConfiguration(file);
+    customFile = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
   }
 
   public static FileConfiguration get() {
@@ -36,19 +35,6 @@ public class ConfigHandler {
     } catch (IOException e) {
       plugin.getLogger().warning("Couldn't save");
     }
-  }
-
-  public static void generateDefaults() {
-    get().addDefault("firstJoinMessages.default", "Welcome to Aurora PvP!");
-    get().addDefault("joinMessages.default",
-        "Use /kits to select a kit, and /createkit to create a kit");
-
-    get().addDefault("antispam.enable", "true");
-    get().addDefault("antispam.timeout", "180000");
-    get().addDefault("antispam.similarity", ".80");
-    get().addDefault("antispam.max-violations", "6");
-    get().addDefault("antispam.violations-expire", "3");
-    save();
   }
 
   public static void reload() {
