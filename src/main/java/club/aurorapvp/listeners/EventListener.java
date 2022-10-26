@@ -1,6 +1,7 @@
 package club.aurorapvp.listeners;
 
-import static club.aurorapvp.modules.SimilarMessages.SimilarMessagesModule;
+import static club.aurorapvp.modules.JoinMessages.sendJoinMessages;
+import static club.aurorapvp.modules.SimilarMessageBlocker.violationChecker;
 
 import club.aurorapvp.config.ConfigHandler;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -21,21 +22,11 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
+
     p = event.getPlayer();
-    ConfigHandler.setup();
 
-    for (Object path : ConfigHandler.get().getConfigurationSection("joinMessages")
-        .getKeys(false).toArray()) {
-      p.sendMessage(Component.text(ConfigHandler.get().getString("joinMessages." + path)));
-    }
+    sendJoinMessages();
 
-    if (!p.hasPlayedBefore()) {
-      for (Object path : ConfigHandler.get().getConfigurationSection("firstJoinMessages")
-          .getKeys(false).toArray()) {
-        p.sendMessage(
-            Component.text(ConfigHandler.get().getString("firstJoinMessages." + path)));
-      }
-    }
   }
 
   @EventHandler
@@ -44,7 +35,7 @@ public class EventListener extends YamlConfiguration implements Listener {
       p = event.getPlayer();
       message = event.originalMessage();
 
-      if (SimilarMessagesModule()) {
+      if (violationChecker()) {
         event.setCancelled(true);
       }
       messageContent.put(event.originalMessage(), p.getUniqueId());
