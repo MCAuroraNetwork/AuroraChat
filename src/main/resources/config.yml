@@ -1,7 +1,13 @@
-firstJoinMessages:
-  default: Welcome to Aurora PvP!
-joinMessages:
-  default: Use /kits to select a kit, and /createkit to create a kit
+messages:
+  firstJoinMessages:
+    default: <gradient:#FFAA00:#FF55FF>Welcome to Aurora PvP!
+  joinMessages:
+    default: <gradient:#FFAA00:#FF55FF>Use /kits to select a kit, and go to the kit creator to create a kit!
+  auto-messages:
+    default: <gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!
+    discord: <gradient:#FFAA00:#FF55FF>Join our discord! discord.gg/SgZ2jj9Ynr
+    reminder: <gradient:#FFAA00:#FF55FF>Remember you can use /ignore to ignore someone!
+    interval: 500
 antispam:
   enable: true
   timeout: 180000
