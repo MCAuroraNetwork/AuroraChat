@@ -1,2 +1,3 @@
 prefix: <gradient:#FFAA00:#FF55FF><bold>AuroraChat > <reset>
 message-similarity-violation: {prefix} <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!
+player-not-online: {prefix} <gradient:#FFAA00:#FF55FF>That player is not online!

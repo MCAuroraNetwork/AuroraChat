@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class EventListener extends YamlConfiguration implements Listener {
   public static HashMap<Component, UUID> messageContent = new HashMap<>();
-  public static HashMap<Component, Long> messageTime = new HashMap<Component, Long>();
+  public static HashMap<Component, Long> messageTime = new HashMap<>();
   public static Player p;
   public static Component message;
 

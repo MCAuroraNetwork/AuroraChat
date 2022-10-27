@@ -10,3 +10,35 @@ commands:
     description: Opens the help menu
     usage: /help
     permission: AuroraChat.help
+  ignore:
+    description: Ignores a player
+    usage: /ignore [player]
+    permission: AuroraChat.ignore
+  unignore:
+    description: Uniqnores a player
+    usage: /unignore [player]
+    permission: AuroraChat.ignore
+  ignorelist:
+    description: Returns a list of all ignored players
+    usage: /ignorelist
+    permission: AuroraChat.ignore
+  msg:
+    aliases: [w, tell]
+    description: Sends a private message
+    usage: /msg [player] [message]
+    permission: AuroraChat.msg
+  reply:
+    aliases: [r]
+    description: Replies to a private message
+    usage: /r [message]
+    permission: AuroraChat.msg
+permissions:
+  AuroraChat.help:
+    description: Allows for players to open the help menu
+    default: true
+  AuroraChat.ignore:
+    description: Allows for players to use ignore commands
+    default: true
+  AuroraChat.msg:
+    description: Allows for players to use message commmands
+    default: true
