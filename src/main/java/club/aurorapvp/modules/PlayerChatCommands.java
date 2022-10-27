@@ -1,5 +1,6 @@
 package club.aurorapvp.modules;
 
+import static club.aurorapvp.AuroraChat.deserializeComponent;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 
 import java.util.HashMap;
@@ -18,8 +19,8 @@ public class PlayerChatCommands {
       Player p = Bukkit.getPlayer(displayName);
       String messageContent = StringUtils.join(args, " ").trim();
 
-      p.sendMessage(Component.text(displayName + "->" + messageContent));
-      sender.sendMessage(Component.text(displayName + "->" + messageContent));
+      p.sendMessage(deserializeComponent.deserialize(displayName + "->" + messageContent));
+      sender.sendMessage(deserializeComponent.deserialize(displayName + "->" + messageContent));
 
       lastRecieved.put(Bukkit.getPlayer(sender.getName()), p);
     } else {
@@ -35,8 +36,8 @@ public class PlayerChatCommands {
     if (receiver.isOnline()) {
       String messageContent = StringUtils.join(args, " ").trim();
 
-      receiver.sendMessage(Component.text(p.getName() + "->" + messageContent));
-      p.sendMessage(Component.text(p.getName() + "->" + messageContent));
+      p.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
+      receiver.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
 
       lastRecieved.put(receiver, p);
     } else {

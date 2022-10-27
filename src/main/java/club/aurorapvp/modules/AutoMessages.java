@@ -15,14 +15,13 @@ public class AutoMessages {
 
     for (Object path : config.getConfigurationSection("messages.joinMessages")
         .getKeys(false).toArray()) {
-      p.sendMessage(Component.text(config.getString("messages.joinMessages." + path)));
+      p.sendMessage(deserializeComponent.deserialize(config.getString("messages.joinMessages." + path)));
     }
 
     if (!p.hasPlayedBefore()) {
       for (Object path : config.getConfigurationSection("messages.firstJoinMessages")
           .getKeys(false).toArray()) {
-        p.sendMessage(
-            Component.text(config.getString("messages.firstJoinMessages." + path)));
+        p.sendMessage(deserializeComponent.deserialize(config.getString("messages.firstJoinMessages." + path)));
       }
     }
   }
@@ -41,5 +40,4 @@ public class AutoMessages {
     executor.scheduleAtFixedRate(sendMessages, 0,
         config.getLong("messages.auto-messages.interval"), TimeUnit.SECONDS);
   }
-
 }
