@@ -6,7 +6,6 @@ import static club.aurorapvp.modules.AutoMessages.sendJoinMessages;
 import static club.aurorapvp.modules.ChatCooldown.checkCooldown;
 import static club.aurorapvp.modules.SimilarMessageBlocker.violationChecker;
 
-import club.aurorapvp.modules.ChatCooldown;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

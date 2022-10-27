@@ -2,8 +2,6 @@ package club.aurorapvp.modules;
 
 import static club.aurorapvp.AuroraChat.config;
 import static club.aurorapvp.AuroraChat.serializeComponent;
-
-import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.util.StringSimilarity.similarity;
 
 import java.util.HashMap;
@@ -53,7 +51,8 @@ public class SimilarMessageBlocker {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     Runnable checkValues = () -> {
       for (Component loggedMessages : messageTime.keySet()) {
-        if (messageTime.get(loggedMessages) + config.getLong("antispam.similarity-detection.timeout") <=
+        if (messageTime.get(loggedMessages) +
+            config.getLong("antispam.similarity-detection.timeout") <=
             System.currentTimeMillis()) {
 
           messageTime.remove(loggedMessages);

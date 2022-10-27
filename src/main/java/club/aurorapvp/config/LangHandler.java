@@ -40,7 +40,8 @@ public class LangHandler {
       pathString = lang.getString(path);
       for (CharSequence placeholder : placeholders.keySet()) {
         if (pathString.contains(placeholder)) {
-          pathString = pathString.replace(placeholder, placeholders.get(placeholder));
+          pathString = pathString.replace(placeholder,
+              placeholders.get(placeholder).replace("{", "").replace("}", ""));
         }
       }
       return deserializeComponent.deserialize(pathString);

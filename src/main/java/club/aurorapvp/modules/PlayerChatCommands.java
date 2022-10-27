@@ -36,7 +36,8 @@ public class PlayerChatCommands {
       String messageContent = StringUtils.join(args, " ").trim();
 
       p.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
-      receiver.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
+      receiver.sendMessage(
+          deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
 
       lastRecieved.put(receiver, p);
     } else {

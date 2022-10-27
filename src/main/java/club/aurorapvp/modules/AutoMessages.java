@@ -7,7 +7,6 @@ import static club.aurorapvp.listeners.EventListener.p;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import net.kyori.adventure.text.Component;
 
 public class AutoMessages {
 
@@ -15,13 +14,15 @@ public class AutoMessages {
 
     for (Object path : config.getConfigurationSection("messages.joinMessages")
         .getKeys(false).toArray()) {
-      p.sendMessage(deserializeComponent.deserialize(config.getString("messages.joinMessages." + path)));
+      p.sendMessage(
+          deserializeComponent.deserialize(config.getString("messages.joinMessages." + path)));
     }
 
     if (!p.hasPlayedBefore()) {
       for (Object path : config.getConfigurationSection("messages.firstJoinMessages")
           .getKeys(false).toArray()) {
-        p.sendMessage(deserializeComponent.deserialize(config.getString("messages.firstJoinMessages." + path)));
+        p.sendMessage(deserializeComponent.deserialize(
+            config.getString("messages.firstJoinMessages." + path)));
       }
     }
   }

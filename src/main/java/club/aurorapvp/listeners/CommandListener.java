@@ -16,9 +16,9 @@ public class CommandListener implements CommandExecutor {
                            @NotNull String label, String[] args) {
 
     switch (command.getName()) {
-      case "help": helpCmd();
-      case "msg": messageCmd(args[0], sender, args);
-      case "reply": replyCmd(sender, args);
+      case "help" -> helpCmd();
+      case "msg" -> messageCmd(args[0], sender, args);
+      case "reply" -> replyCmd(sender, args);
     }
 
     return true;
