@@ -1,7 +1,9 @@
 package club.aurorapvp.config;
 
+import static club.aurorapvp.AuroraChat.DataFolder;
 import static club.aurorapvp.AuroraChat.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -28,7 +30,7 @@ public class ConfigHandler {
     for (String path : Defaults.keySet()) {
       if (!config.contains(path) || config.getString(path) == null) {
         config.set(path, Defaults.get(path));
-        config.save(config.getName());
+        config.save(new File(DataFolder, "config.yml"));
       }
     }
   }

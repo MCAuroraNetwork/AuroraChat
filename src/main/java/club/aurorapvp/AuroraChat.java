@@ -45,9 +45,8 @@ public final class AuroraChat extends JavaPlugin {
 
     // Setup configs
     saveDefaultConfig();
-    saveResource("lang.yml", false);
-    LangHandler.setup();
     try {
+      LangHandler.setup();
       LangHandler.generateDefaults();
       ConfigHandler.generateDefaults();
     } catch (IOException e) {

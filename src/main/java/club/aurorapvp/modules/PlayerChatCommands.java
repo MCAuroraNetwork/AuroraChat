@@ -14,7 +14,7 @@ public class PlayerChatCommands {
 
   public static void messageCmd(String displayName, CommandSender sender, String[] args) {
 
-    if (Bukkit.getPlayerExact(displayName).isOnline()) {
+    if (Bukkit.getPlayer(displayName) != null && Bukkit.getPlayer(displayName).isOnline()) {
       Player p = Bukkit.getPlayer(displayName);
       String messageContent = StringUtils.join(args, " ").trim();
 
@@ -32,7 +32,7 @@ public class PlayerChatCommands {
     Player p = Bukkit.getPlayer(sender.getName());
     Player receiver = lastRecieved.get(p);
 
-    if (receiver.isOnline()) {
+    if (receiver != null && receiver.isOnline()) {
       String messageContent = StringUtils.join(args, " ").trim();
 
       p.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
