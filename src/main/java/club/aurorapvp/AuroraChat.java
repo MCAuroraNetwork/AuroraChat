@@ -30,6 +30,12 @@ public final class AuroraChat extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    // Setup variables
+    plugin = Bukkit.getPluginManager().getPlugin("AuroraChat");
+    DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraChat").getDataFolder();
+    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
+
     //Register Listeners
     getServer().getPluginManager().registerEvents(new EventListener(), this);
     List<Command> commandList = PluginCommandYamlParser.parse(plugin);
@@ -57,12 +63,6 @@ public final class AuroraChat extends JavaPlugin {
     AutoMessages.setup();
     SimilarMessageBlocker.setup();
     ChatCooldown.setup();
-
-    // Setup variables
-    plugin = Bukkit.getPluginManager().getPlugin("AuroraChat");
-    DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraChat").getDataFolder();
-    lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
-    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
 
     plugin.getLogger().info("AuroraChat loaded");
   }
