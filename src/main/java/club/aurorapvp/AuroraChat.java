@@ -1,11 +1,10 @@
 package club.aurorapvp;
 
-import club.aurorapvp.config.ConfigHandler;
 import club.aurorapvp.config.LangHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
+import club.aurorapvp.modules.AutoMessages;
 import club.aurorapvp.modules.SimilarMessageBlocker;
-import club.aurorapvp.modules.TimedMessages;
 import java.io.File;
 import java.util.List;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -13,12 +12,10 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommandYamlParser;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public final class AuroraChat extends JavaPlugin {
   public static Plugin plugin;
@@ -49,7 +46,7 @@ public final class AuroraChat extends JavaPlugin {
     deserializeComponent = MiniMessage.miniMessage();
 
     // Load some modules
-    TimedMessages.setup();
+    AutoMessages.setup();
 
     // Setup variables
     plugin = Bukkit.getPluginManager().getPlugin("AuroraChat");

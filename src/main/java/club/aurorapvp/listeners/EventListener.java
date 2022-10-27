@@ -1,10 +1,8 @@
 package club.aurorapvp.listeners;
 
 import static club.aurorapvp.AuroraChat.config;
-import static club.aurorapvp.AuroraChat.deserializeComponent;
-import static club.aurorapvp.AuroraChat.lang;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
-import static club.aurorapvp.modules.JoinMessages.sendJoinMessages;
+import static club.aurorapvp.modules.AutoMessages.sendJoinMessages;
 import static club.aurorapvp.modules.SimilarMessageBlocker.violationChecker;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
