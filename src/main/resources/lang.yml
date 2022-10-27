@@ -1,2 +1,2 @@
 prefix: <gradient:#FFAA00:#FF55FF><bold>AuroraChat > <reset>
-message-similarity-violation: {PREFIX} <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!
+message-similarity-violation: {prefix} <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!

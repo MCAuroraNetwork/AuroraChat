@@ -56,7 +56,6 @@ public final class AuroraChat extends JavaPlugin {
     DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraChat").getDataFolder();
     lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
     config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
-    prefix = lang.getString("prefix");
 
     plugin.getLogger().info("AuroraChat loaded");
   }
