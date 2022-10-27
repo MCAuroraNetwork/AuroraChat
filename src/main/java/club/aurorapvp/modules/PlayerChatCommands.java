@@ -4,7 +4,6 @@ import static club.aurorapvp.AuroraChat.deserializeComponent;
 import static club.aurorapvp.config.LangHandler.getLangComponent;
 
 import java.util.HashMap;
-import net.kyori.adventure.text.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

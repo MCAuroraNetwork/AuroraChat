@@ -21,10 +21,6 @@ public class CommandListener implements CommandExecutor {
       case "reply": replyCmd(sender, args);
     }
 
-    if (command.getName().equals("aurorakits")) {
-      helpCmd();
-    }
-
     return true;
   }
 }

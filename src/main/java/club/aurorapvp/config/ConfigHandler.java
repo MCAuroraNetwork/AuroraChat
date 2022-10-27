@@ -15,11 +15,15 @@ public class ConfigHandler {
         "<gradient:#FFAA00:#FF55FF>Use /kits to select a kit, and go to the kit creator to create a kit!");
     Defaults.put("messages.auto-messages.default",
         "<gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!");
-    Defaults.put("antispam.enable", "true");
-    Defaults.put("antispam.timeout", "180000");
-    Defaults.put("antispam.similarity", ".80");
-    Defaults.put("antispam.max-violations", "6");
-    Defaults.put("antispam.violations-expire", "300");
+    Defaults.put("antispam.similarity-detection.enable", "true");
+    Defaults.put("antispam.similarity-detection.timeout", "180000");
+    Defaults.put("antispam.similarity-detection.similarity", ".80");
+    Defaults.put("antispam.similarity-detection.max-violations", "6");
+    Defaults.put("antispam.similarity-detection.violations-expire", "180");
+    Defaults.put("antispam.cooldown.enable", "false");
+    Defaults.put("antispam.cooldown.time", "0");
+    Defaults.put("antispam.cooldown.max-violations", "6");
+    Defaults.put("antispam.cooldown.violations-expire", "180");
 
     for (String path : Defaults.keySet()) {
       if (!config.contains(path) || config.getString(path) == null) {

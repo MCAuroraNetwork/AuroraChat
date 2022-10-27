@@ -16,8 +16,14 @@ messages:
     5: <gradient:#FFAA00:#FF55FF>/duel [player] - Sends a duel request to a player
     6: <gradient:#FFAA00:#FF55FF>------------------
 antispam:
-  enable: true
-  timeout: 180000
-  similarity: .80
-  max-violations: 6
-  violations-expire: 300
+  similarity-detection:
+    enable: true
+    timeout: 180000
+    similarity: .80
+    max-violations: 6
+    violations-expire: 180
+  cooldown:
+    enable: false
+    time: 1
+    max-violations: 6
+    violations-expire: 180

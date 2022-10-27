@@ -1,11 +1,14 @@
 package club.aurorapvp;
 
+import club.aurorapvp.config.ConfigHandler;
 import club.aurorapvp.config.LangHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import club.aurorapvp.modules.AutoMessages;
+import club.aurorapvp.modules.ChatCooldown;
 import club.aurorapvp.modules.SimilarMessageBlocker;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -22,7 +25,6 @@ public final class AuroraChat extends JavaPlugin {
   public static File DataFolder;
   public static PlainTextComponentSerializer serializeComponent;
   public static MiniMessage deserializeComponent;
-  public static String prefix;
   public static YamlConfiguration lang;
   public static FileConfiguration config;
 
@@ -39,7 +41,13 @@ public final class AuroraChat extends JavaPlugin {
     saveDefaultConfig();
     saveResource("lang.yml", false);
     LangHandler.setup();
-    SimilarMessageBlocker.setup();
+    try {
+      LangHandler.generateDefaults();
+      ConfigHandler.generateDefaults();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
 
     // Setup Serializers
     serializeComponent = PlainTextComponentSerializer.plainText();
@@ -47,6 +55,8 @@ public final class AuroraChat extends JavaPlugin {
 
     // Load some modules
     AutoMessages.setup();
+    SimilarMessageBlocker.setup();
+    ChatCooldown.setup();
 
     // Setup variables
     plugin = Bukkit.getPluginManager().getPlugin("AuroraChat");
