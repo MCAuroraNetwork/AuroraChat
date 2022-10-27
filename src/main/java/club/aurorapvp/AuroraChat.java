@@ -40,6 +40,7 @@ public final class AuroraChat extends JavaPlugin {
 
     // Setup configs
     saveDefaultConfig();
+    saveResource("lang.yml", false);
     LangHandler.setup();
     SimilarMessageBlocker.setup();
 
