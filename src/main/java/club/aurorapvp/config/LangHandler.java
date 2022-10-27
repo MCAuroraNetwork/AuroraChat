@@ -10,7 +10,7 @@ import net.kyori.adventure.text.Component;
 public class LangHandler {
   private static HashMap<String, String> placeholders;
   private static String pathString;
-  private static HashMap<String, String> Defaults;
+  private static HashMap<String, String> Defaults = new HashMap<>();
 
   public static void setup() {
     for (Object path : lang.getKeys(false).toArray()) {

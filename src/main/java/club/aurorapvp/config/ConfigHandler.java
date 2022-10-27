@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ConfigHandler {
-  private static HashMap<String, String> Defaults;
+  private static HashMap<String, String> Defaults = new HashMap<>();
 
   public static void generateDefaults() throws IOException {
     Defaults.put("messages.firstJoinMessages.default",
