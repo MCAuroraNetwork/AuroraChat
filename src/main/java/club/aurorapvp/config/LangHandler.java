@@ -23,7 +23,7 @@ public class LangHandler {
     for (Object path : lang.getKeys(false).toArray()) {
       if (lang.getString((String) path).startsWith("~") &&
           lang.getString((String) path).endsWith("~")) {
-        placeholders.put((String) path, lang.getString((String) path));
+        placeholders.put((String) path, lang.getString((String) path)).replace("~", "");
       }
     }
   }

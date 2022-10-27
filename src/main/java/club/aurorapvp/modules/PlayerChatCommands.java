@@ -18,8 +18,14 @@ public class PlayerChatCommands {
       Player p = Bukkit.getPlayer(displayName);
       String messageContent = StringUtils.join(args, " ").trim();
 
-      p.sendMessage(deserializeComponent.deserialize(displayName + "->" + messageContent));
-      sender.sendMessage(deserializeComponent.deserialize(displayName + "->" + messageContent));
+      p.sendMessage(deserializeComponent.deserialize(
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + displayName +
+              "<reset> <italic><#AAAAAA>" +
+              messageContent));
+      p.sendMessage(deserializeComponent.deserialize(
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + displayName +
+              "<reset> <italic><#AAAAAA>" +
+              messageContent));
 
       lastRecieved.put(Bukkit.getPlayer(sender.getName()), p);
     } else {
@@ -35,9 +41,14 @@ public class PlayerChatCommands {
     if (receiver != null && receiver.isOnline()) {
       String messageContent = StringUtils.join(args, " ").trim();
 
-      p.sendMessage(deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
-      receiver.sendMessage(
-          deserializeComponent.deserialize(sender.getName() + "->" + messageContent));
+      p.sendMessage(deserializeComponent.deserialize(
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + receiver.getName() +
+              "<reset> <italic><#AAAAAA>" +
+              messageContent));
+      receiver.sendMessage(deserializeComponent.deserialize(
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + receiver.getName() +
+              "<reset> <italic><#AAAAAA>" +
+              messageContent));
 
       lastRecieved.put(receiver, p);
     } else {
