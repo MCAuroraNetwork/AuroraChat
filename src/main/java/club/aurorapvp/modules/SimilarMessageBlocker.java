@@ -57,6 +57,6 @@ public class SimilarMessageBlocker {
     executor.scheduleAtFixedRate(checkValues, 0, 15, TimeUnit.SECONDS);
     Runnable clearViolations = violations::clear;
     executor.scheduleAtFixedRate(clearViolations, 0,
-        config.getInt("antispam.violations-expire"), TimeUnit.MINUTES);
+        config.getInt("antispam.violations-expire"), TimeUnit.SECONDS);
   }
 }

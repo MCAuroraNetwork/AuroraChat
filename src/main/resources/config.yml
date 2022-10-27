@@ -20,4 +20,4 @@ antispam:
   timeout: 180000
   similarity: .80
   max-violations: 6
-  violations-expire: 3
+  violations-expire: 300

@@ -1,11 +1,8 @@
 package club.aurorapvp.config;
 
-import static club.aurorapvp.AuroraChat.DataFolder;
 import static club.aurorapvp.AuroraChat.deserializeComponent;
 import static club.aurorapvp.AuroraChat.lang;
-import static club.aurorapvp.AuroraChat.plugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import net.kyori.adventure.text.Component;
@@ -26,7 +23,8 @@ public class LangHandler {
 
   public static void generateDefaults() throws IOException {
     Defaults.put("prefix", "<gradient:#FFAA00:#FF55FF><bold>AuroraChat > <reset>");
-    Defaults.put("message-similarity-violation", "{PREFIX} <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!");
+    Defaults.put("message-similarity-violation",
+        "{PREFIX} <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!");
 
     for (String path : Defaults.keySet()) {
       if (!lang.contains(path) || lang.getString(path) == null) {
