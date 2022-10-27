@@ -2,10 +2,8 @@ package club.aurorapvp.modules;
 
 import static club.aurorapvp.AuroraChat.config;
 import static club.aurorapvp.AuroraChat.serializeComponent;
-import static club.aurorapvp.listeners.EventListener.message;
-import static club.aurorapvp.listeners.EventListener.messageContent;
-import static club.aurorapvp.listeners.EventListener.messageTime;
-import static club.aurorapvp.listeners.EventListener.p;
+
+import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.util.StringSimilarity.similarity;
 
 import java.util.HashMap;
@@ -14,11 +12,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 
 public class SimilarMessageBlocker {
   private static final HashMap<UUID, Integer> violations = new HashMap<>();
+  private static Component message;
+  private static HashMap<Component, UUID> messageContent = new HashMap<>();
+  private static HashMap<Component, Long> messageTime = new HashMap<>();
+  private static Player p;
 
-  public static boolean violationChecker() {
+
+  public static boolean violationChecker(Player p, Component message) {
+    messageContent.put(message, p.getUniqueId());
+    messageTime.put(message, System.currentTimeMillis());
+
     if (analyzeMessage()) {
       if (violations.containsKey(p.getUniqueId())) {
         violations.put(p.getUniqueId(), violations.get(p.getUniqueId()) + 1);
@@ -26,7 +33,7 @@ public class SimilarMessageBlocker {
         violations.put(p.getUniqueId(), 1);
       }
       return violations.get(p.getUniqueId()) >=
-          config.getInt("antispam.max-violations");
+          config.getInt("antispam.similarity-detection.max-violations");
     }
     return false;
   }
@@ -36,7 +43,7 @@ public class SimilarMessageBlocker {
       if (messageContent.get(loggedMessages) == p.getUniqueId()) {
         return similarity(String.valueOf(serializeComponent.serialize(loggedMessages)),
             String.valueOf(serializeComponent.serialize(message))) >=
-            config.getDouble("antispam.similarity");
+            config.getDouble("antispam.similarity-detection.similarity");
       }
     }
     return false;
@@ -46,7 +53,7 @@ public class SimilarMessageBlocker {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     Runnable checkValues = () -> {
       for (Component loggedMessages : messageTime.keySet()) {
-        if (messageTime.get(loggedMessages) + config.getLong("antispam.timeout") <=
+        if (messageTime.get(loggedMessages) + config.getLong("antispam.similarity-detection.timeout") <=
             System.currentTimeMillis()) {
 
           messageTime.remove(loggedMessages);
@@ -57,6 +64,6 @@ public class SimilarMessageBlocker {
     executor.scheduleAtFixedRate(checkValues, 0, 15, TimeUnit.SECONDS);
     Runnable clearViolations = violations::clear;
     executor.scheduleAtFixedRate(clearViolations, 0,
-        config.getInt("antispam.violations-expire"), TimeUnit.SECONDS);
+        config.getInt("antispam.similarity-detection.violations-expire"), TimeUnit.SECONDS);
   }
 }
