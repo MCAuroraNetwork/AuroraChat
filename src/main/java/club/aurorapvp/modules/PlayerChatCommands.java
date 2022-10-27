@@ -10,24 +10,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PlayerChatCommands {
-  public static HashMap<Player, Player> lastRecieved = new HashMap<>();
+  public static HashMap<String, String> lastRecieved = new HashMap<>();
 
-  public static void messageCmd(String displayName, CommandSender sender, String[] args) {
+  public static void messageCmd(Player p, CommandSender sender, String[] args) {
 
-    if (Bukkit.getPlayer(displayName) != null && Bukkit.getPlayer(displayName).isOnline()) {
-      Player p = Bukkit.getPlayer(displayName);
-      String messageContent = StringUtils.join(args, " ").trim();
+    if (p != null && p.isOnline()) {
+      String messageContent = StringUtils.join(args, " ").replaceFirst(p.getName(), "");
 
       p.sendMessage(deserializeComponent.deserialize(
-          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + displayName +
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + p.getName() +
               "<reset> <italic><#AAAAAA>" +
               messageContent));
-      p.sendMessage(deserializeComponent.deserialize(
-          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + displayName +
+      sender.sendMessage(deserializeComponent.deserialize(
+          "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + p.getName() +
               "<reset> <italic><#AAAAAA>" +
               messageContent));
 
-      lastRecieved.put(Bukkit.getPlayer(sender.getName()), p);
+      lastRecieved.put(sender.getName(), p.getName());
     } else {
       sender.sendMessage(getLangComponent("player-not-online"));
     }
@@ -36,10 +35,10 @@ public class PlayerChatCommands {
   public static void replyCmd(CommandSender sender, String[] args) {
 
     Player p = Bukkit.getPlayer(sender.getName());
-    Player receiver = lastRecieved.get(p);
+    Player receiver = Bukkit.getPlayer(lastRecieved.get(p.getName()));
 
     if (receiver != null && receiver.isOnline()) {
-      String messageContent = StringUtils.join(args, " ").trim();
+      String messageContent = StringUtils.join(args, " ").replaceFirst(receiver.getName(), "");
 
       p.sendMessage(deserializeComponent.deserialize(
           "<gradient:#FFAA00:#FF55FF><bold>" + sender.getName() + " -> " + receiver.getName() +
@@ -50,7 +49,7 @@ public class PlayerChatCommands {
               "<reset> <italic><#AAAAAA>" +
               messageContent));
 
-      lastRecieved.put(receiver, p);
+      lastRecieved.put(receiver.getName(), p.getName());
     } else {
       sender.sendMessage(getLangComponent("player-not-online"));
     }

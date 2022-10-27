@@ -27,6 +27,8 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onPlayerChat(AsyncChatEvent event) {
+    p = event.getPlayer();
+
     if (config.getBoolean("antispam.similarity-detection.enable") &&
         violationChecker(p, event.originalMessage())) {
       event.setCancelled(true);

@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class LangHandler {
   private static HashMap<String, String> placeholders = new HashMap<>();
@@ -23,7 +22,7 @@ public class LangHandler {
     for (Object path : lang.getKeys(false).toArray()) {
       if (lang.getString((String) path).startsWith("~") &&
           lang.getString((String) path).endsWith("~")) {
-        placeholders.put((String) path, lang.getString((String) path)).replace("~", "");
+        placeholders.put((String) path, lang.getString((String) path).replace("~", ""));
       }
     }
   }

@@ -3,7 +3,6 @@ package club.aurorapvp.modules;
 import static club.aurorapvp.AuroraChat.config;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -11,20 +10,21 @@ import org.bukkit.entity.Player;
 
 public class ChatCooldown {
 
-  private static final HashMap<UUID, Integer> violations = new HashMap<>();
-  private static final HashMap<UUID, Integer> timeOfLastMessage = new HashMap<>();
+  private static final HashMap<String, Integer> violations = new HashMap<>();
+  private static final HashMap<String, Long> timeOfLastMessage = new HashMap<>();
 
   public static boolean checkCooldown(Player p) {
-
-    if (timeOfLastMessage.containsKey(p.getUniqueId()) &&
-        timeOfLastMessage.get(p.getUniqueId()) - System.currentTimeMillis() > 1000) {
-      violations.put(p.getUniqueId(), violations.get(p.getUniqueId()) + 1);
-    } else if (!timeOfLastMessage.containsKey(p.getUniqueId()) &&
-        timeOfLastMessage.get(p.getUniqueId()) - System.currentTimeMillis() > 1000) {
-      violations.put(p.getUniqueId(), 1);
+    if (timeOfLastMessage.containsKey(p.getName()) &&
+        Math.abs(timeOfLastMessage.get(p.getName()) - System.currentTimeMillis()) <
+            config.getLong("antispam.cooldown.time") * 1000) {
+      violations.put(p.getName(), violations.get(p.getName()) + 1);
+    } else if (!timeOfLastMessage.containsKey(p.getName()) &&
+        Math.abs(timeOfLastMessage.get(p.getName()) - System.currentTimeMillis()) <
+            config.getLong("antispam.cooldown.time") * 1000) {
+      violations.put(p.getName(), 1);
     }
-
-    return violations.get(p.getUniqueId()) >= config.getInt("antispam.cooldown.max-violations");
+    timeOfLastMessage.put(p.getName(), System.currentTimeMillis());
+    return violations.get(p.getName()) >= config.getInt("antispam.cooldown.max-violations");
   }
 
   public static void setup() {
