@@ -1,5 +1,6 @@
 package club.aurorapvp.modules;
 
+import static club.aurorapvp.AuroraChat.config;
 import static club.aurorapvp.AuroraChat.serializeComponent;
 import static club.aurorapvp.listeners.EventListener.message;
 import static club.aurorapvp.listeners.EventListener.messageContent;
@@ -7,7 +8,6 @@ import static club.aurorapvp.listeners.EventListener.messageTime;
 import static club.aurorapvp.listeners.EventListener.p;
 import static club.aurorapvp.util.StringSimilarity.similarity;
 
-import club.aurorapvp.config.ConfigHandler;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -26,7 +26,7 @@ public class SimilarMessageBlocker {
         violations.put(p.getUniqueId(), 1);
       }
       return violations.get(p.getUniqueId()) >=
-          ConfigHandler.get().getInt("antispam.max-violations");
+          config.getInt("antispam.max-violations");
     }
     return false;
   }
@@ -36,7 +36,7 @@ public class SimilarMessageBlocker {
       if (messageContent.get(loggedMessages) == p.getUniqueId()) {
         return similarity(String.valueOf(serializeComponent.serialize(loggedMessages)),
             String.valueOf(serializeComponent.serialize(message))) >=
-            ConfigHandler.get().getDouble("antispam.similarity");
+            config.getDouble("antispam.similarity");
       }
     }
     return false;
@@ -46,7 +46,7 @@ public class SimilarMessageBlocker {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     Runnable checkValues = () -> {
       for (Component loggedMessages : messageTime.keySet()) {
-        if (messageTime.get(loggedMessages) + ConfigHandler.get().getLong("antispam.timeout") <=
+        if (messageTime.get(loggedMessages) + config.getLong("antispam.timeout") <=
             System.currentTimeMillis()) {
 
           messageTime.remove(loggedMessages);
@@ -57,6 +57,6 @@ public class SimilarMessageBlocker {
     executor.scheduleAtFixedRate(checkValues, 0, 15, TimeUnit.SECONDS);
     Runnable clearViolations = violations::clear;
     executor.scheduleAtFixedRate(clearViolations, 0,
-        ConfigHandler.get().getInt("antispam.violations-expire"), TimeUnit.MINUTES);
+        config.getInt("antispam.violations-expire"), TimeUnit.MINUTES);
   }
 }

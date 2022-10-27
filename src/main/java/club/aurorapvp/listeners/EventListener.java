@@ -1,9 +1,12 @@
 package club.aurorapvp.listeners;
 
+import static club.aurorapvp.AuroraChat.config;
+import static club.aurorapvp.AuroraChat.deserializeComponent;
+import static club.aurorapvp.AuroraChat.lang;
+import static club.aurorapvp.config.LangHandler.getLangComponent;
 import static club.aurorapvp.modules.JoinMessages.sendJoinMessages;
 import static club.aurorapvp.modules.SimilarMessageBlocker.violationChecker;
 
-import club.aurorapvp.config.ConfigHandler;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.UUID;
@@ -31,12 +34,13 @@ public class EventListener extends YamlConfiguration implements Listener {
 
   @EventHandler
   public void onPlayerChat(AsyncChatEvent event) {
-    if (ConfigHandler.get().getBoolean("antispam.enable")) {
+    if (config.getBoolean("antispam.enable")) {
       p = event.getPlayer();
       message = event.originalMessage();
 
       if (violationChecker()) {
         event.setCancelled(true);
+        p.sendMessage(getLangComponent("antispam.message-similarity"));
       }
       messageContent.put(event.originalMessage(), p.getUniqueId());
       messageTime.put(event.originalMessage(), System.currentTimeMillis());

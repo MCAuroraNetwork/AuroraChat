@@ -1,6 +1,7 @@
 package club.aurorapvp;
 
 import club.aurorapvp.config.ConfigHandler;
+import club.aurorapvp.config.LangHandler;
 import club.aurorapvp.listeners.CommandListener;
 import club.aurorapvp.listeners.EventListener;
 import club.aurorapvp.modules.SimilarMessageBlocker;
@@ -26,6 +27,7 @@ public final class AuroraChat extends JavaPlugin {
   public static MiniMessage deserializeComponent;
   public static String prefix;
   public static YamlConfiguration lang;
+  public static FileConfiguration config;
 
   @Override
   public void onEnable() {
@@ -38,7 +40,7 @@ public final class AuroraChat extends JavaPlugin {
 
     // Setup configs
     saveDefaultConfig();
-    ConfigHandler.setup();
+    LangHandler.setup();
     SimilarMessageBlocker.setup();
 
     // Setup Serializers
@@ -52,6 +54,7 @@ public final class AuroraChat extends JavaPlugin {
     plugin = Bukkit.getPluginManager().getPlugin("AuroraChat");
     DataFolder = Bukkit.getServer().getPluginManager().getPlugin("AuroraChat").getDataFolder();
     lang = YamlConfiguration.loadConfiguration(new File(DataFolder, "lang.yml"));
+    config = YamlConfiguration.loadConfiguration(new File(DataFolder, "config.yml"));
     prefix = lang.getString("prefix");
 
     plugin.getLogger().info("AuroraChat loaded");
