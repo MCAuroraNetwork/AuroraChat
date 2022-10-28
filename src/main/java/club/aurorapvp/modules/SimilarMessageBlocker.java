@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 
 public class SimilarMessageBlocker {
   private static final HashMap<String, Integer> violations = new HashMap<>();
-  private static Component message;
   private static HashMap<Component, String> messageContent = new HashMap<>();
   private static HashMap<Component, Long> messageTime = new HashMap<>();
 
@@ -23,9 +22,9 @@ public class SimilarMessageBlocker {
     messageContent.put(message, p.getName());
     messageTime.put(message, System.currentTimeMillis());
 
-    if (analyzeMessage(p)) {
+    if (analyzeMessage(p, message)) {
       if (violations.containsKey(p.getName())) {
-        violations.put(p.getName(), violations.get(p.getUniqueId()) + 1);
+        violations.put(p.getName(), violations.get(p.getName()) + 1);
       } else {
         violations.put(p.getName(), 1);
       }
@@ -35,7 +34,7 @@ public class SimilarMessageBlocker {
     return false;
   }
 
-  public static boolean analyzeMessage(Player p) {
+  public static boolean analyzeMessage(Player p, Component message) {
     for (Component loggedMessages : messageContent.keySet()) {
       if (Objects.equals(messageContent.get(loggedMessages), p.getName())) {
         return similarity(String.valueOf(serializeComponent.serialize(loggedMessages)),
