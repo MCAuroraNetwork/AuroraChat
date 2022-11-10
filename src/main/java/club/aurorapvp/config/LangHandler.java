@@ -28,7 +28,7 @@ public class LangHandler {
   }
 
   public static void generateDefaults() throws IOException {
-    Defaults.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraChat > <reset>~");
+    Defaults.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraChat ><reset>~");
     Defaults.put("message-similarity-violation",
         "prefix <gradient:#FFAA00:#FF55FF>You're sending too many similar messages!");
     Defaults.put("cooldown-violation",
