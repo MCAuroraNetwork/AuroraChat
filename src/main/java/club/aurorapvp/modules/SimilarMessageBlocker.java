@@ -4,7 +4,6 @@ import club.aurorapvp.AuroraChat;
 import club.aurorapvp.config.Config;
 import club.aurorapvp.config.Lang;
 import club.aurorapvp.util.StringUtil;
-import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -68,20 +68,16 @@ public class SimilarMessageBlocker extends ViolationModule {
 
         double distance = StringUtil.similarity(messageContent, oldMessage);
 
-        if (!(distance <= similarityThreshold)) {
+        if (distance < similarityThreshold) {
           break;
         }
 
         if (System.currentTimeMillis() - oldTime < messageExpiryDelay * 1000) {
           this.addViolation(p, event);
-
+          return;
         } else {
           messages.remove(pair);
         }
-      }
-
-      if (this.getViolations(p) >= maxViolations) {
-        this.punish(p, event);
       }
 
       messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
