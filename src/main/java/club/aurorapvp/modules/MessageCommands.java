@@ -21,8 +21,9 @@ public class MessageCommands extends ChatModule {
   public void init(JavaPlugin plugin) {
     long startTime = System.currentTimeMillis();
 
-    Commands.MANAGER.registerCommand(new MessageCommand());
-    Commands.MANAGER.registerCommand(new ReplyCommand());
+    // TODO enable checking
+    Commands.MANAGER.registerCommand(new MessageCommand(this));
+    Commands.MANAGER.registerCommand(new ReplyCommand(this));
 
     boolean enabled = Config.get().getBoolean("message-commands.enable");
 

@@ -10,21 +10,21 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @CommandAlias("reply|r")
 public class ReplyCommand extends BaseCommand {
-  private final MessageCommands messageCommands =
-      (MessageCommands) ChatModules.getModule("messageCommands");
+  private final MessageCommands module;
 
+  public ReplyCommand(MessageCommands module) {
+    this.module = module;
+  }
   @Default
   @CommandCompletion("@players")
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
   public void messageCommand(Player p, String message) {
-    assert messageCommands != null;
-    messageCommands.replyToMessage(p, message);
+    module.replyToMessage(p, message);
   }
 
   @CatchUnknown

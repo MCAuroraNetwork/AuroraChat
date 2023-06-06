@@ -15,19 +15,21 @@ import org.bukkit.entity.Player;
 
 @CommandAlias("message|msg|tell")
 public class MessageCommand extends BaseCommand {
-  private final MessageCommands messageCommands =
-      (MessageCommands) ChatModules.getModule("messageCommands");
+  private final MessageCommands module;
+
+  public MessageCommand(MessageCommands module) {
+    this.module = module;
+  }
 
   @Default
   @CommandCompletion("@players")
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
   public void messageCommand(Player p, String player, String message) {
-    Player recipiant = Bukkit.getPlayer(player);
+    Player recipient = Bukkit.getPlayer(player);
 
-    assert messageCommands != null;
-    assert recipiant != null;
-    messageCommands.sendMessage(p, recipiant, message);
+    assert recipient != null;
+    module.sendMessage(p, recipient, message);
   }
 
   @CatchUnknown

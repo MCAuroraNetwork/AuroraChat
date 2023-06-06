@@ -37,7 +37,7 @@ public class Lang {
         "prefix <gradient:#FFAA00:#FF55FF>You're sending messages too quickly!");
     DEFAULTS.put("player-not-online",
         "prefix <gradient:#FFAA00:#FF55FF>That player is not online!");
-    DEFAULTS.put("message-format", "prefix <gradient:#FFAA00:#FF55FF><bold>%1$s → %2$s » %3$s");
+    DEFAULTS.put("message-format", "prefix <gradient:#FFAA00:#FF55FF><bold>%1$s -> %2$s > <reset> %3$s");
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().contains(path) || get().getString(path) == null) {
