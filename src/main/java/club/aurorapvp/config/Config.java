@@ -26,6 +26,7 @@ public class Config {
     DEFAULTS.put("messages.auto-messages.default",
         "<gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!");
     DEFAULTS.put("messages.auto-messages-interval", 300);
+    DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
     DEFAULTS.put("antispam.similarity-detection.timeout", 180);
     DEFAULTS.put("antispam.similarity-detection.similarity", .80);

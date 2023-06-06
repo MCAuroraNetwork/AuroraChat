@@ -24,12 +24,12 @@ public class MessageCommands extends ChatModule {
     Commands.MANAGER.registerCommand(new MessageCommand());
     Commands.MANAGER.registerCommand(new ReplyCommand());
 
-    boolean enabled = Config.get().getBoolean("messages.enabled");
+    boolean enabled = Config.get().getBoolean("message-commands.enable");
 
     this.setEnabled(enabled);
 
     AuroraChat.INSTANCE.getLogger().info(
-        "AutoMessages module loaded in " + (System.currentTimeMillis() - startTime) +
+        "MessageCommands module loaded in " + (System.currentTimeMillis() - startTime) +
             "ms. Enabled: " + enabled);
   }
 

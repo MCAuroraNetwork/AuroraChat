@@ -17,7 +17,7 @@ public class ChatCooldown extends ViolationModule {
   public void init(JavaPlugin plugin) {
     long startTime = System.currentTimeMillis();
 
-    boolean enabled = Config.get().getBoolean("messages.enabled");
+    boolean enabled = Config.get().getBoolean("antispam.cooldown.enable");
 
     this.setEnabled(enabled);
 

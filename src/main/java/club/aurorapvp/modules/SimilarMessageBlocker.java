@@ -1,5 +1,6 @@
 package club.aurorapvp.modules;
 
+import club.aurorapvp.AuroraChat;
 import club.aurorapvp.config.Config;
 import club.aurorapvp.config.Lang;
 import club.aurorapvp.util.StringUtil;
@@ -29,8 +30,18 @@ public class SimilarMessageBlocker extends ViolationModule {
   }
 
   public void init(JavaPlugin plugin) {
+    long startTime = System.currentTimeMillis();
+
     similarityThreshold = Config.get().getDouble("antispam.similarity-detection.similarity");
     messageExpiryDelay = Config.get().getLong("antispam.similarity-detection.timeout");
+
+    boolean enabled = Config.get().getBoolean("antispam.similarity-detection.enable");
+
+    this.setEnabled(enabled);
+
+    AuroraChat.INSTANCE.getLogger().info(
+        "SimilarityDetection module loaded in " + (System.currentTimeMillis() - startTime) +
+            "ms. Enabled: " + enabled);
   }
 
   protected void punish(Player p, Cancellable event) {
