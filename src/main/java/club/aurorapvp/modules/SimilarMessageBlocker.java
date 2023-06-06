@@ -1,66 +1,87 @@
 package club.aurorapvp.modules;
 
-import static club.aurorapvp.AuroraChat.config;
-import static club.aurorapvp.AuroraChat.serializeComponent;
-import static club.aurorapvp.util.StringSimilarity.similarity;
-
+import club.aurorapvp.config.Config;
+import club.aurorapvp.config.Lang;
+import club.aurorapvp.util.StringUtil;
+import io.papermc.paper.chat.ChatRenderer;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import java.util.AbstractMap;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class SimilarMessageBlocker {
-  private static final HashMap<String, Integer> violations = new HashMap<>();
-  private static HashMap<Component, String> messageContent = new HashMap<>();
-  private static HashMap<Component, Long> messageTime = new HashMap<>();
+public class SimilarMessageBlocker extends ViolationModule {
+  private final Map<Player, Set<AbstractMap.SimpleEntry<String, Long>>> playerMessages =
+      new HashMap<>();
+  private double similarityThreshold;
+  private long messageExpiryDelay;
 
-
-  public static boolean violationChecker(Player p, Component message) {
-    messageContent.put(message, p.getName());
-    messageTime.put(message, System.currentTimeMillis());
-
-    if (analyzeMessage(p, message)) {
-      if (violations.containsKey(p.getName())) {
-        violations.put(p.getName(), violations.get(p.getName()) + 1);
-      } else {
-        violations.put(p.getName(), 1);
-      }
-      return violations.get(p.getName()) >=
-          config.getInt("antispam.similarity-detection.max-violations");
-    }
-    return false;
+  protected SimilarMessageBlocker(String name) {
+    super(name, Config.get().getLong("antispam.similarity-detection.violations-expire") * 1000,
+        Config.get().getInt("antispam.similarity-detection.max-violations"));
   }
 
-  public static boolean analyzeMessage(Player p, Component message) {
-    for (Component loggedMessages : messageContent.keySet()) {
-      if (Objects.equals(messageContent.get(loggedMessages), p.getName())) {
-        return similarity(String.valueOf(serializeComponent.serialize(loggedMessages)),
-            String.valueOf(serializeComponent.serialize(message))) >=
-            config.getDouble("antispam.similarity-detection.similarity");
-      }
-    }
-    return false;
+  public void init(JavaPlugin plugin) {
+    similarityThreshold = Config.get().getDouble("antispam.similarity-detection.similarity");
+    messageExpiryDelay = Config.get().getLong("antispam.similarity-detection.timeout");
   }
 
-  public static void setup() {
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    Runnable checkValues = () -> {
-      for (Component loggedMessages : messageTime.keySet()) {
-        if (messageTime.get(loggedMessages) +
-            config.getLong("antispam.similarity-detection.timeout") <=
-            System.currentTimeMillis()) {
+  protected void punish(Player p, Cancellable event) {
+    event.setCancelled(true);
 
-          messageTime.remove(loggedMessages);
-          messageContent.remove(loggedMessages);
+    p.sendMessage(Lang.getComponent("message-similarity-violation"));
+  }
+
+  private final ChatRenderer chatRenderer =
+      (source, sourceDisplayName, message, viewer) -> Component.translatable("chat.type.text",
+          sourceDisplayName, message);
+
+  @EventHandler
+  public void onAsyncChat(AsyncChatEvent event) {
+    Player p = event.getPlayer();
+    Component message = event.message();
+
+    String messageContent = PlainTextComponentSerializer.plainText().serialize(message);
+
+    if (playerMessages.containsKey(p)) {
+      Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(p);
+
+      for (AbstractMap.SimpleEntry<String, Long> pair : messages) {
+        String oldMessage = pair.getKey();
+        long oldTime = pair.getValue();
+
+        double distance = StringUtil.similarity(messageContent, oldMessage);
+
+        if (!(distance <= similarityThreshold)) {
+          break;
+        }
+
+        if (System.currentTimeMillis() - oldTime < messageExpiryDelay * 1000) {
+          this.addViolation(p, event);
+
+        } else {
+          messages.remove(pair);
         }
       }
-    };
-    executor.scheduleAtFixedRate(checkValues, 0, 15, TimeUnit.SECONDS);
-    Runnable clearViolations = violations::clear;
-    executor.scheduleAtFixedRate(clearViolations, 0,
-        config.getInt("antispam.similarity-detection.violations-expire"), TimeUnit.SECONDS);
+
+      if (this.getViolations(p) >= maxViolations) {
+        this.punish(p, event);
+      }
+
+      messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
+    } else {
+      Set<AbstractMap.SimpleEntry<String, Long>> messages = new HashSet<>();
+      messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
+      playerMessages.put(p, messages);
+    }
+
+    event.renderer(chatRenderer);
   }
 }
