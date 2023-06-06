@@ -73,7 +73,7 @@ public class AutoMessages extends ChatModule {
     }
 
     paths =
-        Objects.requireNonNull(Config.get().getConfigurationSection("messages.first-moin-messages"))
+        Objects.requireNonNull(Config.get().getConfigurationSection("messages.first-join-messages"))
             .getKeys(false)
             .toArray();
     firstJoinMessages = new String[paths.length];
