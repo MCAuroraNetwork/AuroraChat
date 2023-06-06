@@ -46,7 +46,10 @@ public abstract class ViolationModule extends ChatModule {
   }
 
   protected int getViolations(Player p) {
-    return violations.get(p);
+    if (violations.containsKey(p)) {
+      return violations.get(p);
+    }
+    return 0;
   }
 
   protected void clearViolations(Player p) {

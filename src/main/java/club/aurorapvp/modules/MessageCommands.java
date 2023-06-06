@@ -14,8 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MessageCommands extends ChatModule {
   private final Map<Player, Player> lastSender = new HashMap<>();
 
-  protected MessageCommands(String name) {
-    super(name);
+  public MessageCommands() {
+    super("MessageCommands");
   }
 
   public void init(JavaPlugin plugin) {

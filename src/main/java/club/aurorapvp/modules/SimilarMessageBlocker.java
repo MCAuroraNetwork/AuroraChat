@@ -24,8 +24,8 @@ public class SimilarMessageBlocker extends ViolationModule {
   private double similarityThreshold;
   private long messageExpiryDelay;
 
-  protected SimilarMessageBlocker(String name) {
-    super(name, Config.get().getLong("antispam.similarity-detection.violations-expire") * 1000,
+  public SimilarMessageBlocker() {
+    super("SimilarMessageBlocker", Config.get().getLong("antispam.similarity-detection.violations-expire") * 1000,
         Config.get().getInt("antispam.similarity-detection.max-violations"));
   }
 
@@ -34,6 +34,8 @@ public class SimilarMessageBlocker extends ViolationModule {
 
     similarityThreshold = Config.get().getDouble("antispam.similarity-detection.similarity");
     messageExpiryDelay = Config.get().getLong("antispam.similarity-detection.timeout");
+
+    Bukkit.getPluginManager().registerEvents(this, AuroraChat.INSTANCE);
 
     boolean enabled = Config.get().getBoolean("antispam.similarity-detection.enable");
 

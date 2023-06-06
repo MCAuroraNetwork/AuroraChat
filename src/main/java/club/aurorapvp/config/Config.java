@@ -25,7 +25,7 @@ public class Config {
         "<gradient:#FFAA00:#FF55FF>Use /kits to select a kit, and go to the kit creator to create a kit!");
     DEFAULTS.put("messages.auto-messages.default",
         "<gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!");
-    DEFAULTS.put("messages.auto-messages-interval", 300);
+    DEFAULTS.put("messages.auto-messages.interval", 300);
     DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
     DEFAULTS.put("antispam.similarity-detection.timeout", 180);
@@ -35,7 +35,7 @@ public class Config {
     DEFAULTS.put("antispam.cooldown.enable", false);
     DEFAULTS.put("antispam.cooldown.time", 0);
     DEFAULTS.put("antispam.cooldown.max-violations", 6);
-    DEFAULTS.put("antispam.cooldown.violations-expire", 180);
+    DEFAULTS.put("antispam.cooldown.violations-expire", 5);
 
     for (String path : DEFAULTS.keySet()) {
       if (!get().isSet(path) || get().getString(path) == null) {

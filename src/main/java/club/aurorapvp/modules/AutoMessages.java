@@ -26,7 +26,6 @@ public class AutoMessages extends ChatModule {
     long startTime = System.currentTimeMillis();
 
     this.loadMessages();
-    Bukkit.getPluginManager().registerEvents(this, plugin);
 
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -40,6 +39,8 @@ public class AutoMessages extends ChatModule {
 
     executor.scheduleAtFixedRate(sendMessages, 0,
         Config.get().getLong("messages.auto-messages.interval"), TimeUnit.SECONDS);
+
+    Bukkit.getPluginManager().registerEvents(this, plugin);
 
     boolean enabled = Config.get().getBoolean("messages.enabled");
 

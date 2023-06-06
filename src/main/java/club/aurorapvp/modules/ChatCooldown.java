@@ -6,6 +6,7 @@ import club.aurorapvp.config.Lang;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.Map;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,8 @@ public class ChatCooldown extends ViolationModule {
 
     boolean enabled = Config.get().getBoolean("antispam.cooldown.enable");
 
+    Bukkit.getPluginManager().registerEvents(this, AuroraChat.INSTANCE);
+
     this.setEnabled(enabled);
 
     AuroraChat.INSTANCE.getLogger().info(
@@ -26,7 +29,7 @@ public class ChatCooldown extends ViolationModule {
             "ms. Enabled: " + enabled);
   }
 
-  protected ChatCooldown() {
+  public ChatCooldown() {
     super("ChatCooldown", Config.get().getLong("antispam.cooldown.violations-expire") * 1000,
         Config.get().getInt("antispam.cooldown.max-violations"));
   }
@@ -41,8 +44,11 @@ public class ChatCooldown extends ViolationModule {
   }
 
   public static boolean onCooldown(Player p) {
-    return (timeOfLastMessage.get(p) - System.currentTimeMillis()) <=
-        Config.get().getLong("antispam.cooldown.time") * 1000;
+    if (timeOfLastMessage.containsKey(p)) {
+      return (timeOfLastMessage.get(p) - System.currentTimeMillis()) <=
+          Config.get().getLong("antispam.cooldown.time") * 1000;
+    }
+    return false;
   }
 
   protected void punish(Player p, Cancellable event) {
