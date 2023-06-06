@@ -50,10 +50,6 @@ public class SimilarMessageBlocker extends ViolationModule {
     p.sendMessage(Lang.getComponent("message-similarity-violation"));
   }
 
-  private final ChatRenderer chatRenderer =
-      (source, sourceDisplayName, message, viewer) -> Component.translatable("chat.type.text",
-          sourceDisplayName, message);
-
   @EventHandler
   public void onAsyncChat(AsyncChatEvent event) {
     Player p = event.getPlayer();
@@ -92,7 +88,5 @@ public class SimilarMessageBlocker extends ViolationModule {
       messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
       playerMessages.put(p, messages);
     }
-
-    event.renderer(chatRenderer);
   }
 }
