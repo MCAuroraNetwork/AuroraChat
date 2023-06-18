@@ -63,6 +63,7 @@ public class Config {
         AuroraChat.INSTANCE.getLogger().severe("Failed to generate config file");
       }
     }
+
     config = YamlConfiguration.loadConfiguration(FILE);
     AuroraChat.INSTANCE.getLogger().info("Config reloaded!");
   }
