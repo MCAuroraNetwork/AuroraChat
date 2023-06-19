@@ -2,12 +2,13 @@ package club.aurorapvp.modules;
 
 import club.aurorapvp.AuroraChat;
 import club.aurorapvp.config.Config;
-import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -52,36 +53,40 @@ public class AutoMessages extends ChatModule {
   }
 
   private void loadMessages() {
-    Object[] paths =
-        Objects.requireNonNull(Config.get().getConfigurationSection("messages.auto-messages"))
-            .getKeys(false).toArray();
-    autoMessages = new String[paths.length];
+    ConfigurationSection messages = Config.get().getConfigurationSection("messages");
+
+    assert messages != null;
+    ConfigurationSection autoMessages = messages.getConfigurationSection("auto-messages");
+    ConfigurationSection joinMessages = messages.getConfigurationSection("join-messages");
+    ConfigurationSection firstJoinMessages =
+        messages.getConfigurationSection("first-join-messages");
+
+    assert autoMessages != null;
+    assert joinMessages != null;
+    assert firstJoinMessages != null;
+    Set<String> autoKeys = autoMessages.getKeys(false);
+    Set<String> joinKeys = joinMessages.getKeys(false);
+    Set<String> firstJoinKeys = firstJoinMessages.getKeys(false);
+
+    this.autoMessages = new String[autoKeys.size()];
+    this.joinMessages = new String[joinKeys.size()];
+    this.firstJoinMessages = new String[firstJoinKeys.size()];
 
     int i = 0;
-    for (Object path : paths) {
-      autoMessages[i] = Config.get().getString((String) path);
+    for (String key : autoKeys) {
+      this.autoMessages[i] = autoMessages.getString(key);
       i++;
     }
 
-    paths = Objects.requireNonNull(Config.get().getConfigurationSection("messages.join-messages"))
-        .getKeys(false).toArray();
-    joinMessages = new String[paths.length];
-
     i = 0;
-    for (Object path : paths) {
-      joinMessages[i] = Config.get().getString((String) path);
+    for (String key : joinKeys) {
+      this.joinMessages[i] = joinMessages.getString(key);
       i++;
     }
 
-    paths =
-        Objects.requireNonNull(Config.get().getConfigurationSection("messages.first-join-messages"))
-            .getKeys(false)
-            .toArray();
-    firstJoinMessages = new String[paths.length];
-
     i = 0;
-    for (Object path : paths) {
-      firstJoinMessages[i] = Config.get().getString((String) path);
+    for (String key : firstJoinKeys) {
+      this.firstJoinMessages[i] = firstJoinMessages.getString(key);
       i++;
     }
   }
