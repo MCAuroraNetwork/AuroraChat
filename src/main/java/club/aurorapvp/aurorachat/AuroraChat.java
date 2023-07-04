@@ -1,7 +1,11 @@
-package club.aurorapvp;
+package club.aurorapvp.aurorachat;
 
-import club.aurorapvp.config.Config;
-import club.aurorapvp.config.Lang;
+import club.aurorapvp.aurorachat.commands.CommandManager;
+import club.aurorapvp.aurorachat.config.Config;
+import club.aurorapvp.aurorachat.config.Lang;
+import club.aurorapvp.aurorachat.modules.AutoMessages;
+import club.aurorapvp.aurorachat.modules.ChatCooldown;
+import club.aurorapvp.aurorachat.modules.SimilarMessageBlocker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AuroraChat extends JavaPlugin {
@@ -16,8 +20,10 @@ public final class AuroraChat extends JavaPlugin {
     // Initialize classes
     Config.init();
     Lang.init();
-    ChatModules.init();
-    Commands.init();
+    AutoMessages.init();
+    ChatCooldown.init();
+    SimilarMessageBlocker.init();
+    CommandManager.init();
 
     getLogger().info(
         "AuroraChat loaded in " + (System.currentTimeMillis() - startTime) +

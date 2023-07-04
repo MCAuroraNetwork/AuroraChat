@@ -1,6 +1,6 @@
 name: AuroraChat
 version: '${version}'
-main: club.aurorapvp.AuroraChat
+main: club.aurorapvp.aurorachat.AuroraChat
 api-version: '1.20'
 authors: [ Villagers654 ]
 description: A Chat Plugin for the Aurora Network

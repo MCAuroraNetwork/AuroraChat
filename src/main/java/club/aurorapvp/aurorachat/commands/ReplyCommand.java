@@ -1,7 +1,6 @@
-package club.aurorapvp.commands;
+package club.aurorapvp.aurorachat.commands;
 
-import club.aurorapvp.ChatModules;
-import club.aurorapvp.modules.MessageCommands;
+import club.aurorapvp.aurorachat.modules.MessageCommands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
@@ -14,17 +13,12 @@ import org.bukkit.entity.Player;
 
 @CommandAlias("reply|r")
 public class ReplyCommand extends BaseCommand {
-  private final MessageCommands module;
-
-  public ReplyCommand(MessageCommands module) {
-    this.module = module;
-  }
   @Default
   @CommandCompletion("@players")
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
   public void messageCommand(Player p, String message) {
-    module.replyToMessage(p, message);
+    MessageCommands.replyToMessage(p, message);
   }
 
   @CatchUnknown

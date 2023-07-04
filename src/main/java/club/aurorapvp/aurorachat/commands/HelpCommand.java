@@ -1,4 +1,4 @@
-package club.aurorapvp.commands;
+package club.aurorapvp.aurorachat.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;

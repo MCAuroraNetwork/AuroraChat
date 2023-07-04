@@ -1,6 +1,6 @@
-package club.aurorapvp.config;
+package club.aurorapvp.aurorachat.config;
 
-import club.aurorapvp.AuroraChat;
+import club.aurorapvp.aurorachat.AuroraChat;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

@@ -1,0 +1,21 @@
+package club.aurorapvp.aurorachat.modules;
+
+import club.aurorapvp.aurorachat.config.Lang;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.entity.Player;
+
+public class MessageCommands {
+  private static final Map<Player, Player> lastSender = new HashMap<>();
+
+  public static void sendMessage(Player sender, Player recipient, String message) {
+    sender.sendMessage(Lang.formatComponent("message-format", "You", recipient.getName(), message));
+    recipient.sendMessage(Lang.formatComponent("message-format", sender.getName(), "You", message));
+
+    lastSender.put(recipient, sender);
+  }
+
+  public static void replyToMessage(Player sender, String message) {
+    sendMessage(sender, lastSender.get(sender), message);
+  }
+}

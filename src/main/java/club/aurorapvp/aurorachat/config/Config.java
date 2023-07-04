@@ -1,6 +1,6 @@
-package club.aurorapvp.config;
+package club.aurorapvp.aurorachat.config;
 
-import club.aurorapvp.AuroraChat;
+import club.aurorapvp.aurorachat.AuroraChat;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class Config {
         "<gradient:#FFAA00:#FF55FF>Use /kits to select a kit, and go to the kit creator to create a kit!");
     DEFAULTS.put("messages.auto-messages.default",
         "<gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!");
-    DEFAULTS.put("messages.auto-messages.interval", 300);
+    DEFAULTS.put("messages.auto-messages-interval", 300);
     DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
     DEFAULTS.put("antispam.similarity-detection.timeout", 180);

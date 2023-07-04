@@ -1,4 +1,4 @@
-package club.aurorapvp.util;
+package club.aurorapvp.aurorachat.util;
 
 public class StringUtil {
   public static double similarity(String s1, String s2) {
