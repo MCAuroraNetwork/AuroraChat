@@ -5,27 +5,6 @@ api-version: '1.20'
 authors: [ Villagers654 ]
 description: A Chat Plugin for the Aurora Network
 website: aurorapvp.club
-commands:
-  help:
-    description: Opens the help menu
-    permission: aurorachat.command.help
-  ignore:
-    description: Ignores a player
-    permission: aurorachat.command.ignore
-  unignore:
-    description: Uniqnores a player
-    permission: aurorachat.command.unignore
-  ignorelist:
-    description: Returns a list of all ignored players
-    permission: aurorachat.command.ignorelist
-  msg:
-    aliases: [ w, tell ]
-    description: Sends a private message
-    permission: aurorachat.command.msg
-  reply:
-    aliases: [ r ]
-    description: Replies to a private message
-    permission: aurorachat.command.reply
 permissions:
   aurorachat.command.help:
     default: true
