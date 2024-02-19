@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class PluginCommands extends BaseCommand {
 
   @Subcommand("reload")
-  @CommandPermission("aurorachat.admin")
+  @CommandPermission("aurorachat.command.reload")
   @Description("Reloads all plugin configs")
   @SuppressWarnings("unused")
   public void onReload(Player player) {

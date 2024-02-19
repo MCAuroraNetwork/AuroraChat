@@ -7,20 +7,26 @@ description: A Chat Plugin for the Aurora Network
 website: aurorapvp.club
 permissions:
   aurorachat.command.help:
-    default: true
+    default: false
   aurorachat.command.ignore:
-    default: true
+    default: false
   aurorachat.command.unignore:
-    default: true
+    default: false
   aurorachat.command.ignorelist:
-    default: true
+    default: false
   aurorachat.command.msg:
-    default: true
+    default: false
   aurorachat.command.reply:
-    default: true
+    default: false
+  aurorachat.command.reload:
+    default: false
+
   aurorachat.admin:
     description: Enables use of AuroraChat admin commands
     default: op
+    children:
+      aurorachat.command.reload: true
+
   aurorachat.default:
     description: Enables use of AuroraChat basic commands
     default: true
