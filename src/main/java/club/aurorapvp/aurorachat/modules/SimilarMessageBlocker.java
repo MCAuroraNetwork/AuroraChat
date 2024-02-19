@@ -38,12 +38,6 @@ public class SimilarMessageBlocker {
         .getLong("antispam.similarity-detection.timeout");
   }
 
-  protected static void punish(Player p, Cancellable event) {
-    event.setCancelled(true);
-
-    p.sendMessage(AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
-  }
-
   public static void onAsyncChat(AsyncChatEvent event) {
     Player p = event.getPlayer();
     Component message = event.message();
@@ -99,7 +93,9 @@ public class SimilarMessageBlocker {
     nextViolationClear.put(p, timer);
 
     if (violations.get(p) >= maxViolations) {
-      SimilarMessageBlocker.punish(p, event);
+      event.setCancelled(true);
+
+      p.sendMessage(AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
     }
   }
 
