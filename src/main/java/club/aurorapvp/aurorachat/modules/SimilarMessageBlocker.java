@@ -36,13 +36,13 @@ public class SimilarMessageBlocker {
       return;
     }
 
-    Player p = event.getPlayer();
+    Player player = event.getPlayer();
     Component message = event.message();
 
     String messageContent = PlainTextComponentSerializer.plainText().serialize(message);
 
-    if (playerMessages.containsKey(p)) {
-      Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(p);
+    if (playerMessages.containsKey(player)) {
+      Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(player);
 
       for (AbstractMap.SimpleEntry<String, Long> pair : messages) {
         String oldMessage = pair.getKey();
@@ -66,7 +66,7 @@ public class SimilarMessageBlocker {
     } else {
       Set<AbstractMap.SimpleEntry<String, Long>> messages = new HashSet<>();
       messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
-      playerMessages.put(p, messages);
+      playerMessages.put(player, messages);
     }
   }
 }

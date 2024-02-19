@@ -32,9 +32,9 @@ public class ChatCooldown {
     timeOfLastMessage.put(event.getPlayer(), System.currentTimeMillis());
   }
 
-  public static boolean onCooldown(Player p) {
-    if (timeOfLastMessage.containsKey(p)) {
-      return (timeOfLastMessage.get(p) - System.currentTimeMillis()) <=
+  public static boolean onCooldown(Player player) {
+    if (timeOfLastMessage.containsKey(player)) {
+      return (timeOfLastMessage.get(player) - System.currentTimeMillis()) <=
           AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.time") * 1000;
     }
     return false;

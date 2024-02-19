@@ -20,9 +20,9 @@ public class AutoMessages {
   private static String[] firstJoinMessages;
 
   private static final Runnable sendMessages = () -> {
-    for (Player p : Bukkit.getOnlinePlayers()) {
+    for (Player player : Bukkit.getOnlinePlayers()) {
       for (String message : autoMessages) {
-        p.sendMessage(MiniMessage.miniMessage().deserialize(message));
+        player.sendMessage(MiniMessage.miniMessage().deserialize(message));
       }
     }
   };
@@ -82,18 +82,18 @@ public class AutoMessages {
   }
 
   public static void sendJoinMessages(PlayerJoinEvent event) {
-    Player p = event.getPlayer();
+    Player player = event.getPlayer();
 
     for (String message : joinMessages) {
-      p.sendMessage(MiniMessage.miniMessage().deserialize(message));
+      player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
-    if (!p.hasPlayedBefore()) {
+    if (!player.hasPlayedBefore()) {
       return;
     }
 
     for (String message : firstJoinMessages) {
-      p.sendMessage(MiniMessage.miniMessage().deserialize(message));
+      player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
   }
 }
