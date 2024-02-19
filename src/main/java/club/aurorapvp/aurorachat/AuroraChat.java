@@ -47,14 +47,17 @@ public final class AuroraChat extends JavaPlugin {
     SimilarMessageBlocker.reload();
 
     getLogger().info(
-        "AuroraChat loaded in " + (System.currentTimeMillis() - startTime) +
+        "AuroraChat enabled in " + (System.currentTimeMillis() - startTime) +
             "ms");
   }
 
   @Override
   public void onDisable() {
-    getLogger().info("AuroraChat Unloaded");
-  }
+    long startTime = System.currentTimeMillis();
+
+    getLogger().info(
+        "AuroraChat disabled in " + (System.currentTimeMillis() - startTime) +
+            "ms");  }
 
   public void reloadConfig() {
     config.reload();
