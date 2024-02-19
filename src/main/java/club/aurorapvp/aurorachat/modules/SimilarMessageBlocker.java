@@ -42,6 +42,10 @@ public class SimilarMessageBlocker {
   }
 
   public static void onAsyncChat(AsyncChatEvent event) {
+    if (!AuroraChat.getInstance().getConfig().getBoolean("antispam.similarity-detection.enable")) {
+      return;
+    }
+
     Player p = event.getPlayer();
     Component message = event.message();
 

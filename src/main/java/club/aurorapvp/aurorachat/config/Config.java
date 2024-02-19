@@ -20,7 +20,6 @@ public class Config {
   public void generateDefaults() {
     final HashMap<String, Object> DEFAULTS = new HashMap<>();
 
-    DEFAULTS.put("messages.enabled", true);
     DEFAULTS.put("messages.first-join-messages.default",
         "<yellow><bold>Welcome to Aurora PvP!");
     DEFAULTS.put("messages.join-messages.default",

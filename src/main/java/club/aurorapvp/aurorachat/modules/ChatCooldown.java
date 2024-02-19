@@ -27,6 +27,10 @@ public class ChatCooldown {
   }
 
   public static void onPlayerChat(AsyncChatEvent event) {
+    if (!AuroraChat.getInstance().getConfig().getBoolean("antispam.cooldown.enable")) {
+      return;
+    }
+
     if (ChatCooldown.onCooldown(event.getPlayer())) {
       ChatCooldown.addViolation(event.getPlayer(), event);
     }
