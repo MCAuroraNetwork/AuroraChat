@@ -17,6 +17,7 @@ public class MessageCommand extends BaseCommand {
   @CommandCompletion("@players")
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
+  @SuppressWarnings("unused")
   public void messageCommand(Player p, String player, String message) {
     Player recipient = Bukkit.getPlayer(player);
 

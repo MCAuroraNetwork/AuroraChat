@@ -42,6 +42,13 @@ public class Lang {
     DEFAULTS.put("player-not-online",
         "prefix <red>That player is not online!");
     DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s");
+    DEFAULTS.put("help", "");
+    DEFAULTS.put("help-command",
+        """
+            prefix <yellow><bold>All Commands:
+                    
+            <blue><bold>/msg [player]: <reset><yellow>Sends a private message to a player
+            """);
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().contains(path) || getYaml().getString(path) == null) {

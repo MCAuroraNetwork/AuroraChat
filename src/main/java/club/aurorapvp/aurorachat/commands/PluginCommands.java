@@ -5,6 +5,7 @@ import club.aurorapvp.aurorachat.modules.AutoMessages;
 import club.aurorapvp.aurorachat.modules.ChatCooldown;
 import club.aurorapvp.aurorachat.modules.SimilarMessageBlocker;
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
@@ -12,10 +13,11 @@ import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.entity.Player;
 
 @CommandAlias("aurorachat")
+@CommandPermission("aurorachat.command.aurorachat")
 public class PluginCommands extends BaseCommand {
 
   @Subcommand("reload")
-  @CommandPermission("aurorachat.command.reload")
+  @CommandPermission("aurorachat.command.aurorachat.reload")
   @Description("Reloads all plugin configs")
   @SuppressWarnings("unused")
   public void onReload(Player player) {
@@ -32,5 +34,14 @@ public class PluginCommands extends BaseCommand {
     AuroraChat.getInstance()
         .getLogger()
         .info("AuroraChat reloaded in " + (System.currentTimeMillis() - startTime) + "ms");
+  }
+
+  @Subcommand("help")
+  @CommandPermission("aurorachat.command.aurorachat.help")
+  @Description("Explains all plugin commands")
+  @CatchUnknown
+  @SuppressWarnings("unused")
+  public void onHelp(Player player) {
+    player.sendMessage(AuroraChat.getInstance().getLang().getComponent("help-command"));
   }
 }

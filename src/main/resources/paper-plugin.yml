@@ -18,14 +18,16 @@ permissions:
     default: false
   aurorachat.command.reply:
     default: false
-  aurorachat.command.reload:
+  aurorachat.command.aurorachat.reload:
+    default: false
+  aurorachat.command.aurorachat.help:
     default: false
 
   aurorachat.admin:
     description: Enables use of AuroraChat admin commands
     default: op
     children:
-      aurorachat.command.reload: true
+      aurorachat.command.aurorachat.reload: true
 
   aurorachat.default:
     description: Enables use of AuroraChat basic commands
@@ -37,3 +39,4 @@ permissions:
       aurorachat.command.ignorelist: true
       aurorachat.command.msg: true
       aurorachat.command.reply: true
+      aurorachat.command.aurorachat.help: true

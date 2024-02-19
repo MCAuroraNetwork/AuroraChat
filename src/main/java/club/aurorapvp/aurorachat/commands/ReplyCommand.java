@@ -18,12 +18,14 @@ public class ReplyCommand extends BaseCommand {
   @CommandCompletion("@players")
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
+  @SuppressWarnings("unused")
   public void messageCommand(Player p, String message) {
     MessageCommands.replyToMessage(p, message);
   }
 
   @CatchUnknown
   @Subcommand("help")
+  @SuppressWarnings("unused")
   public void onUnknown() {
 
   }
