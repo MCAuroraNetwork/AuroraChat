@@ -20,12 +20,6 @@ public class Config {
   public void generateDefaults() {
     final HashMap<String, Object> DEFAULTS = new HashMap<>();
 
-    DEFAULTS.put("messages.first-join-messages.default",
-        "<yellow><bold>Welcome to Aurora PvP!");
-    DEFAULTS.put("messages.join-messages.default",
-        "<yellow><bold>Use /kits to select a kit, and go to the kit creator to create a kit!");
-    DEFAULTS.put("messages.auto-messages.messages.default",
-        "<yellow><bold>Remember to go to the kit creator to create a kit!");
     DEFAULTS.put("messages.auto-messages.interval", 300);
     DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
