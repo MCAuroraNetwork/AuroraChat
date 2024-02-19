@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.util;
 
 import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.HashMap;
