@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,29 +14,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class AutoMessages {
 
+  private static ScheduledExecutorService executor;
   private static String[] autoMessages;
   private static String[] joinMessages;
   private static String[] firstJoinMessages;
 
-  public static void init() {
-    AutoMessages.loadMessages();
-
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-
-    final Runnable sendMessages = () -> {
-      for (Player p : Bukkit.getOnlinePlayers()) {
-        for (String message : autoMessages) {
-          p.sendMessage(MiniMessage.miniMessage().deserialize(message));
-        }
+  private static final Runnable sendMessages = () -> {
+    for (Player p : Bukkit.getOnlinePlayers()) {
+      for (String message : autoMessages) {
+        p.sendMessage(MiniMessage.miniMessage().deserialize(message));
       }
-    };
+    }
+  };
 
-    executor.scheduleAtFixedRate(sendMessages, 0,
-        AuroraChat.getInstance().getConfig().getLong("messages.auto-messages.interval"),
-        TimeUnit.SECONDS);
-  }
-
-  private static void loadMessages() {
+  public static void reload() {
     ConfigurationSection messages = AuroraChat.getInstance().getConfig()
         .getConfigurationSection("messages");
 
@@ -73,7 +65,20 @@ public class AutoMessages {
     for (String key : firstJoinKeys) {
       firstJoinMessages[i] = firstJoinSection.getString(key);
       i++;
+
     }
+
+    if (executor != null && !executor.isShutdown()) {
+      executor.shutdownNow();
+    }
+
+    executor = Executors.newScheduledThreadPool(1);
+
+    executor.scheduleAtFixedRate(sendMessages, 0,
+        AuroraChat.getInstance().getConfig().getLong("messages.auto-messages.interval"),
+        TimeUnit.SECONDS);
+
+    AuroraChat.getInstance().getLogger().log(Level.INFO, "AutoMessages module reloaded");
   }
 
   public static void sendJoinMessages(PlayerJoinEvent event) {

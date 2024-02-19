@@ -9,7 +9,8 @@ public class CommandManager {
 
   public static void init() {
     MANAGER.registerCommand(new HelpCommand());
-    CommandManager.MANAGER.registerCommand(new MessageCommand());
-    CommandManager.MANAGER.registerCommand(new ReplyCommand());
+    MANAGER.registerCommand(new MessageCommand());
+    MANAGER.registerCommand(new ReplyCommand());
+    MANAGER.registerCommand(new PluginCommands());
   }
 }

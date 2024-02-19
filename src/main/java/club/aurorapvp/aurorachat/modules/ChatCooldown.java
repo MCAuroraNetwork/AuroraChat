@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
@@ -17,10 +18,12 @@ public class ChatCooldown {
   private static long violationExpiryDelay;
   protected static int maxViolations;
 
-  public static void init() {
+  public static void reload() {
     violationExpiryDelay =
         AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.violations-expire") * 1000;
     maxViolations = AuroraChat.getInstance().getConfig().getInt("antispam.cooldown.max-violations");
+
+    AuroraChat.getInstance().getLogger().log(Level.INFO, "ChatCooldown module reloaded");
   }
 
   public static void onPlayerChat(AsyncChatEvent event) {

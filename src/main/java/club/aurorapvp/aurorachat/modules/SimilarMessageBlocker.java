@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class SimilarMessageBlocker {
   private static double similarityThreshold;
   private static long messageExpiryDelay;
 
-  public static void init() {
+  public static void reload() {
     violationExpiryDelay =
         AuroraChat.getInstance().getConfig()
             .getLong("antispam.similarity-detection.violations-expire") * 1000;
@@ -36,6 +37,8 @@ public class SimilarMessageBlocker {
         .getDouble("antispam.similarity-detection.similarity");
     messageExpiryDelay = AuroraChat.getInstance().getConfig()
         .getLong("antispam.similarity-detection.timeout");
+
+    AuroraChat.getInstance().getLogger().log(Level.INFO, "SimilarMessageBlocker module reloaded");
   }
 
   public static void onAsyncChat(AsyncChatEvent event) {

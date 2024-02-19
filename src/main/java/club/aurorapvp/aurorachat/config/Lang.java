@@ -34,6 +34,7 @@ public class Lang {
     }
 
     DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraChat ><reset>~");
+    DEFAULTS.put("reloaded", "prefix <green>Reloaded");
     DEFAULTS.put("message-similarity-violation",
         "prefix <red>You're sending too many similar messages!");
     DEFAULTS.put("cooldown-violation",

@@ -41,10 +41,10 @@ public final class AuroraChat extends JavaPlugin {
 
     // Initialize classes
     EventManager.init();
-    AutoMessages.init();
-    ChatCooldown.init();
-    SimilarMessageBlocker.init();
     CommandManager.init();
+    AutoMessages.reload();
+    ChatCooldown.reload();
+    SimilarMessageBlocker.reload();
 
     getLogger().info(
         "AuroraChat loaded in " + (System.currentTimeMillis() - startTime) +
@@ -54,5 +54,9 @@ public final class AuroraChat extends JavaPlugin {
   @Override
   public void onDisable() {
     getLogger().info("AuroraChat Unloaded");
+  }
+
+  public void reloadConfig() {
+    config.reload();
   }
 }
