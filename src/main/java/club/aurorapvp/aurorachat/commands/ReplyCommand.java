@@ -22,11 +22,4 @@ public class ReplyCommand extends BaseCommand {
   public void messageCommand(Player p, String message) {
     MessageCommands.replyToMessage(p, message);
   }
-
-  @CatchUnknown
-  @Subcommand("help")
-  @SuppressWarnings("unused")
-  public void onUnknown() {
-
-  }
 }
