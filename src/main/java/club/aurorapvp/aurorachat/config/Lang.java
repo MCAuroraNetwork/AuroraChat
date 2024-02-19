@@ -39,8 +39,8 @@ public class Lang {
         "prefix <red>You're sending too many similar messages!");
     DEFAULTS.put("cooldown-violation",
         "prefix <red>You're sending messages too quickly!");
-    DEFAULTS.put("player-not-online",
-        "prefix <red>That player is not online!");
+    DEFAULTS.put("unknown-recipient",
+        "prefix <red>Cannot find recipient!");
     DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s");
     DEFAULTS.put("help", "");
     DEFAULTS.put("help-command",

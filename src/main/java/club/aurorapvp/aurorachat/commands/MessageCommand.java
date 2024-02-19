@@ -1,5 +1,6 @@
 package club.aurorapvp.aurorachat.commands;
 
+import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.modules.MessageCommands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -18,10 +19,14 @@ public class MessageCommand extends BaseCommand {
   @Syntax("[player] [message]")
   @Description("Sends a message to another player")
   @SuppressWarnings("unused")
-  public void messageCommand(Player p, String player, String message) {
-    Player recipient = Bukkit.getPlayer(player);
+  public void messageCommand(Player player, String playerName, String message) {
+    Player recipient = Bukkit.getPlayer(playerName);
 
-    assert recipient != null;
-    MessageCommands.sendMessage(p, recipient, message);
+    if (recipient == null) {
+      player.sendMessage(AuroraChat.getInstance().getLang().getComponent("unknown-recipient"));
+      return;
+    }
+
+    MessageCommands.sendMessage(player, recipient, message);
   }
 }
