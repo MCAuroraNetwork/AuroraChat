@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorachat.modules;
 
-import club.aurorapvp.aurorachat.config.Config;
-import club.aurorapvp.aurorachat.config.Lang;
+import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.util.StringUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.AbstractMap;
@@ -17,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class SimilarMessageBlocker {
+
   private static final Map<Player, Set<AbstractMap.SimpleEntry<String, Long>>> playerMessages =
       new HashMap<>();
   private static final Map<Player, Integer> violations = new HashMap<>();
@@ -28,16 +28,20 @@ public class SimilarMessageBlocker {
 
   public static void init() {
     violationExpiryDelay =
-        Config.get().getLong("antispam.similarity-detection.violations-expire") * 1000;
-    maxViolations = Config.get().getInt("antispam.similarity-detection.max-violations");
-    similarityThreshold = Config.get().getDouble("antispam.similarity-detection.similarity");
-    messageExpiryDelay = Config.get().getLong("antispam.similarity-detection.timeout");
+        AuroraChat.getInstance().getConfig()
+            .getLong("antispam.similarity-detection.violations-expire") * 1000;
+    maxViolations = AuroraChat.getInstance().getConfig()
+        .getInt("antispam.similarity-detection.max-violations");
+    similarityThreshold = AuroraChat.getInstance().getConfig()
+        .getDouble("antispam.similarity-detection.similarity");
+    messageExpiryDelay = AuroraChat.getInstance().getConfig()
+        .getLong("antispam.similarity-detection.timeout");
   }
 
   protected static void punish(Player p, Cancellable event) {
     event.setCancelled(true);
 
-    p.sendMessage(Lang.getComponent("message-similarity-violation"));
+    p.sendMessage(AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
   }
 
   public static void onAsyncChat(AsyncChatEvent event) {

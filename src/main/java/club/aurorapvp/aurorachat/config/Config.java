@@ -4,28 +4,30 @@ import club.aurorapvp.aurorachat.AuroraChat;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
-  private static final File FILE = new File(AuroraChat.INSTANCE.getDataFolder(), "config.yml");
-  private static YamlConfiguration config;
 
-  public static void init() {
-    reload();
-    generateDefaults();
+  private final File FILE = new File(AuroraChat.getInstance().getDataFolder(), "config.yml");
+  private YamlConfiguration config;
+
+  public Config() {
+    this.reload();
+    this.generateDefaults();
   }
 
-  public static void generateDefaults() {
+  public void generateDefaults() {
     final HashMap<String, Object> DEFAULTS = new HashMap<>();
 
     DEFAULTS.put("messages.enabled", true);
     DEFAULTS.put("messages.first-join-messages.default",
-        "<gradient:#FFAA00:#FF55FF>Welcome to Aurora PvP!");
+        "<yellow><bold>Welcome to Aurora PvP!");
     DEFAULTS.put("messages.join-messages.default",
-        "<gradient:#FFAA00:#FF55FF>Use /kits to select a kit, and go to the kit creator to create a kit!");
-    DEFAULTS.put("messages.auto-messages.default",
-        "<gradient:#FFAA00:#FF55FF>Remember to go to the kit creator to create a kit!");
-    DEFAULTS.put("messages.auto-messages-interval", 300);
+        "<yellow><bold>Use /kits to select a kit, and go to the kit creator to create a kit!");
+    DEFAULTS.put("messages.auto-messages.messages.default",
+        "<yellow><bold>Remember to go to the kit creator to create a kit!");
+    DEFAULTS.put("messages.auto-messages.interval", 300);
     DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
     DEFAULTS.put("antispam.similarity-detection.timeout", 180);
@@ -38,33 +40,38 @@ public class Config {
     DEFAULTS.put("antispam.cooldown.violations-expire", 5);
 
     for (String path : DEFAULTS.keySet()) {
-      if (!get().isSet(path) || get().getString(path) == null) {
-        get().set(path, DEFAULTS.get(path));
+      if (!getYaml().isSet(path) || getYaml().getString(path) == null) {
+        getYaml().set(path, DEFAULTS.get(path));
       }
     }
 
     try {
-      get().save(FILE);
+      getYaml().save(FILE);
     } catch (IOException e) {
-      AuroraChat.INSTANCE.getLogger().severe("Failed to save config file");
+      AuroraChat.getInstance().getLogger().log(Level.SEVERE, "Failed to save config file", e);
     }
   }
 
-  public static YamlConfiguration get() {
+  public YamlConfiguration getYaml() {
     return config;
   }
 
-  public static void reload() {
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public void reload() {
     if (!FILE.exists()) {
       try {
         FILE.getParentFile().mkdirs();
         FILE.createNewFile();
+
+        config = YamlConfiguration.loadConfiguration(FILE);
+
+        this.generateDefaults();
       } catch (IOException e) {
-        AuroraChat.INSTANCE.getLogger().severe("Failed to generate config file");
+        AuroraChat.getInstance().getLogger()
+            .log(Level.SEVERE, "Failed to generate config file", e);
       }
     }
-
     config = YamlConfiguration.loadConfiguration(FILE);
-    AuroraChat.INSTANCE.getLogger().info("Config reloaded!");
+    AuroraChat.getInstance().getLogger().info("Config reloaded!");
   }
 }

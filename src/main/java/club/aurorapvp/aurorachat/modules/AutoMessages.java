@@ -1,6 +1,6 @@
 package club.aurorapvp.aurorachat.modules;
 
-import club.aurorapvp.aurorachat.config.Config;
+import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class AutoMessages {
+
   private static String[] autoMessages;
   private static String[] joinMessages;
   private static String[] firstJoinMessages;
@@ -30,14 +31,16 @@ public class AutoMessages {
     };
 
     executor.scheduleAtFixedRate(sendMessages, 0,
-        Config.get().getLong("messages.auto-messages-interval"), TimeUnit.SECONDS);
+        AuroraChat.getInstance().getConfig().getLong("messages.auto-messages.interval"),
+        TimeUnit.SECONDS);
   }
 
   private static void loadMessages() {
-    ConfigurationSection messages = Config.get().getConfigurationSection("messages");
+    ConfigurationSection messages = AuroraChat.getInstance().getConfig()
+        .getConfigurationSection("messages");
 
     assert messages != null;
-    ConfigurationSection autoSection = messages.getConfigurationSection("auto-messages");
+    ConfigurationSection autoSection = messages.getConfigurationSection("auto-messages.messages");
     ConfigurationSection joinSection = messages.getConfigurationSection("join-messages");
     ConfigurationSection firstJoinSection =
         messages.getConfigurationSection("first-join-messages");

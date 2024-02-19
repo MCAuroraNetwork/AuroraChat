@@ -5,7 +5,8 @@ import club.aurorapvp.aurorachat.events.listeners.PlayerEventListener;
 import org.bukkit.Bukkit;
 
 public class EventManager {
+
   public static void init() {
-    Bukkit.getPluginManager().registerEvents(new PlayerEventListener(), AuroraChat.INSTANCE);
+    Bukkit.getPluginManager().registerEvents(new PlayerEventListener(), AuroraChat.getInstance());
   }
 }

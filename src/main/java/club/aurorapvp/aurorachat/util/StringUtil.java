@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorachat.util;
 
 public class StringUtil {
+
   public static double similarity(String s1, String s2) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();

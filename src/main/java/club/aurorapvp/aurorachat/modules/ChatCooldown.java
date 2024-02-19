@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorachat.modules;
 
-import club.aurorapvp.aurorachat.config.Config;
-import club.aurorapvp.aurorachat.config.Lang;
+import club.aurorapvp.aurorachat.AuroraChat;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +8,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.EventHandler;
 
 public class ChatCooldown {
+
   private static final Map<Player, Long> timeOfLastMessage = new HashMap<>();
   private static final Map<Player, Integer> violations = new HashMap<>();
   private static final Map<Player, Timer> nextViolationClear = new HashMap<>();
@@ -19,8 +18,9 @@ public class ChatCooldown {
   protected static int maxViolations;
 
   public static void init() {
-    violationExpiryDelay = Config.get().getLong("antispam.cooldown.violations-expire") * 1000;
-    maxViolations = Config.get().getInt("antispam.cooldown.max-violations");
+    violationExpiryDelay =
+        AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.violations-expire") * 1000;
+    maxViolations = AuroraChat.getInstance().getConfig().getInt("antispam.cooldown.max-violations");
   }
 
   public static void onPlayerChat(AsyncChatEvent event) {
@@ -71,13 +71,13 @@ public class ChatCooldown {
   public static boolean onCooldown(Player p) {
     if (timeOfLastMessage.containsKey(p)) {
       return (timeOfLastMessage.get(p) - System.currentTimeMillis()) <=
-          Config.get().getLong("antispam.cooldown.time") * 1000;
+          AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.time") * 1000;
     }
     return false;
   }
 
   private static void punish(Player p, Cancellable event) {
-    p.sendMessage(Lang.getComponent("cooldown-violation"));
+    p.sendMessage(AuroraChat.getInstance().getLang().getComponent("cooldown-violation"));
 
     event.setCancelled(true);
   }

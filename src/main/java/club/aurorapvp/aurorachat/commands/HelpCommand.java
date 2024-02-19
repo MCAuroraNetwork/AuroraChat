@@ -7,6 +7,7 @@ import co.aikar.commands.annotation.Default;
 
 @CommandAlias("help")
 public class HelpCommand extends BaseCommand {
+
   @CatchUnknown
   @Default
   public void helpCommand() {

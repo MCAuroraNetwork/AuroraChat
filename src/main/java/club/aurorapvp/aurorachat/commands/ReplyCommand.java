@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 @CommandAlias("reply|r")
 public class ReplyCommand extends BaseCommand {
+
   @Default
   @CommandCompletion("@players")
   @Syntax("[player] [message]")

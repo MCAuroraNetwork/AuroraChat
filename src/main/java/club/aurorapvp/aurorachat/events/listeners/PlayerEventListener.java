@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerEventListener implements Listener {
+
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
     AutoMessages.sendJoinMessages(event);
