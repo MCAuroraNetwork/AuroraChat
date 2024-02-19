@@ -26,7 +26,11 @@ public class ChatCooldown {
     }
 
     if (ChatCooldown.onCooldown(event.getPlayer())) {
-      violationHandler.addViolation(event.getPlayer(), event);
+      if (violationHandler.addViolation(event.getPlayer())) {
+        event.getPlayer().sendMessage(AuroraChat.getInstance().getLang().getComponent("cooldown-violation"));
+
+        event.setCancelled(true);
+      }
     }
 
     timeOfLastMessage.put(event.getPlayer(), System.currentTimeMillis());

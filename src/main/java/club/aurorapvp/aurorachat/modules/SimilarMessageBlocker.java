@@ -55,7 +55,11 @@ public class SimilarMessageBlocker {
         }
 
         if (System.currentTimeMillis() - oldTime < messageTimeout * 1000) {
-          violationHandler.addViolation(p, event);
+          if (violationHandler.addViolation(player)) {
+            event.getPlayer().sendMessage(AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
+
+            event.setCancelled(true);
+          }
           return;
         } else {
           messages.remove(pair);

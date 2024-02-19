@@ -20,10 +20,10 @@ public class ViolationHandler {
     this.maxViolations = maxViolations;
   }
 
-  public void addViolation(Player p, Cancellable event) {
-    violations.put(p, violations.getOrDefault(p, 0) + 1);
+  public boolean addViolation(Player player) {
+    violations.put(player, violations.getOrDefault(player, 0) + 1);
 
-    Timer timer = nextViolationClear.get(p);
+    Timer timer = nextViolationClear.get(player);
 
     if (timer != null) {
       timer.cancel();
@@ -33,17 +33,13 @@ public class ViolationHandler {
     timer.schedule(new TimerTask() {
       @Override
       public void run() {
-        clearViolations(p);
+        clearViolations(player);
       }
     }, expirationDelay);
 
-    nextViolationClear.put(p, timer);
+    nextViolationClear.put(player, timer);
 
-    if (violations.get(p) >= maxViolations) {
-      p.sendMessage(AuroraChat.getInstance().getLang().getComponent("cooldown-violation"));
-
-      event.setCancelled(true);
-    }
+    return violations.get(player) >= maxViolations;
   }
 
   private void clearViolations(Player p) {
