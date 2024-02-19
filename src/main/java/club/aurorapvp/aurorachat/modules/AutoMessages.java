@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.AuroraChat;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,11 +20,11 @@ public class AutoMessages {
   private static String[] joinMessages;
   private static String[] firstJoinMessages;
 
-  private static final Runnable sendMessages = () -> {
+  private static final Runnable sendAutoMessage = () -> {
+    String message = autoMessages[new Random().nextInt(autoMessages.length - 1)];
+
     for (Player player : Bukkit.getOnlinePlayers()) {
-      for (String message : autoMessages) {
-        player.sendMessage(MiniMessage.miniMessage().deserialize(message));
-      }
+      player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
   };
 
@@ -74,7 +75,7 @@ public class AutoMessages {
 
     executor = Executors.newScheduledThreadPool(1);
 
-    executor.scheduleAtFixedRate(sendMessages, 0,
+    executor.scheduleAtFixedRate(sendAutoMessage, 0,
         AuroraChat.getInstance().getConfig().getLong("messages.auto-messages.interval"),
         TimeUnit.SECONDS);
 
