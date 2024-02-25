@@ -42,6 +42,9 @@ public class Lang {
     DEFAULTS.put("unknown-recipient",
         "prefix <red>Cannot find recipient!");
     DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s");
+    DEFAULTS.put("name-color-changed",
+        "prefix <green>Your name color has been changed to <%1$s><bold>%1$s");
+    DEFAULTS.put("unknown-color", "prefix <red>Unknown color!");
     DEFAULTS.put("help", "");
     DEFAULTS.put("help-command",
         """

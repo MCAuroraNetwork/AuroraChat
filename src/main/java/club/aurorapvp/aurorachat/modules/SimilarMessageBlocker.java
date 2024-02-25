@@ -32,7 +32,7 @@ public class SimilarMessageBlocker {
     AuroraChat.getInstance().getLogger().log(Level.INFO, "ChatCooldown module reloaded");
   }
 
-  public static void onAsyncChat(AsyncChatEvent event) {
+  public static void onChat(AsyncChatEvent event) {
     if (!AuroraChat.getInstance().getConfig().getBoolean("antispam.similarity-detection.enable")) {
       return;
     }
