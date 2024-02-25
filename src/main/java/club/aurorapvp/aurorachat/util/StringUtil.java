@@ -2,6 +2,22 @@ package club.aurorapvp.aurorachat.util;
 
 public class StringUtil {
 
+  public static String convertToNormalTypedLanguage(String camelCaseString) {
+    StringBuilder normalTypedLanguage = new StringBuilder();
+
+    for (int i = 0; i < camelCaseString.length(); i++) {
+      char currentChar = camelCaseString.charAt(i);
+
+      if (Character.isUpperCase(currentChar) && i != 0) {
+        normalTypedLanguage.append(" ");
+      }
+
+      normalTypedLanguage.append(currentChar);
+    }
+
+    return normalTypedLanguage.toString();
+  }
+
   public static double similarity(String s1, String s2) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();

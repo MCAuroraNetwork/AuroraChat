@@ -47,6 +47,7 @@ public class Lang {
         """
             prefix <yellow><bold>All Commands:
                     
+                    
             <blue><bold>/msg [player]: <reset><yellow>Sends a private message to a player
             """);
 

@@ -18,6 +18,8 @@ permissions:
     default: false
   aurorachat.command.reply:
     default: false
+  aurorachat.command.namecolor:
+    default: false
   aurorachat.command.aurorachat.reload:
     default: false
   aurorachat.command.aurorachat.help:
@@ -28,6 +30,12 @@ permissions:
     default: op
     children:
       aurorachat.command.aurorachat.reload: true
+
+  aurorachat.namecolor:
+    description: Allows changing name color
+    default: op
+    children:
+      aurorachat.command.namecolor: true
 
   aurorachat.default:
     description: Enables use of AuroraChat basic commands
@@ -40,3 +48,8 @@ permissions:
       aurorachat.command.msg: true
       aurorachat.command.reply: true
       aurorachat.command.aurorachat.help: true
+
+dependencies:
+  server:
+    Vault:
+      required: true

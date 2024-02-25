@@ -21,7 +21,7 @@ public class ChatCooldown {
     AuroraChat.getInstance().getLogger().log(Level.INFO, "ChatCooldown module reloaded");
   }
 
-  public static void onPlayerChat(AsyncChatEvent event) {
+  public static void onChat(AsyncChatEvent event) {
     if (!AuroraChat.getInstance().getConfig().getBoolean("antispam.cooldown.enable")) {
       return;
     }
