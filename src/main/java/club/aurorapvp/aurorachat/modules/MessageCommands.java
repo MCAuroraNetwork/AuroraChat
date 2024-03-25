@@ -3,11 +3,13 @@ package club.aurorapvp.aurorachat.modules;
 import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class MessageCommands {
 
-  private static final Map<Player, Player> lastSender = new HashMap<>();
+  private static final Map<UUID, UUID> lastSender = new HashMap<>();
 
   public static void sendMessage(Player sender, Player recipient, String message) {
     sender.sendMessage(
@@ -16,10 +18,10 @@ public class MessageCommands {
     recipient.sendMessage(AuroraChat.getInstance().getLang()
         .formatComponent("message-format", sender.getName(), "You", message));
 
-    lastSender.put(recipient, sender);
+    lastSender.put(recipient.getUniqueId(), sender.getUniqueId());
   }
 
   public static void replyToMessage(Player sender, String message) {
-    sendMessage(sender, lastSender.get(sender), message);
+    sendMessage(sender, (Player) Bukkit.getOfflinePlayer(lastSender.get(sender.getUniqueId())), message);
   }
 }
