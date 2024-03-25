@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.AuroraChat;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -35,40 +36,12 @@ public class AutoMessages {
     assert messages != null;
     ConfigurationSection autoSection = messages.getConfigurationSection("auto-messages.messages");
     ConfigurationSection joinSection = messages.getConfigurationSection("join-messages");
-    ConfigurationSection firstJoinSection =
-        messages.getConfigurationSection("first-join-messages");
+    ConfigurationSection firstJoinSection = messages.getConfigurationSection("first-join-messages");
 
-    assert autoSection != null;
-    assert joinSection != null;
-    assert firstJoinSection != null;
-
-    Set<String> autoKeys = autoSection.getKeys(false);
-    Set<String> joinKeys = joinSection.getKeys(false);
-    Set<String> firstJoinKeys = firstJoinSection.getKeys(false);
-
-    autoMessages = new String[autoKeys.size()];
-    joinMessages = new String[joinKeys.size()];
-    firstJoinMessages = new String[firstJoinKeys.size()];
-
-    int i = 0;
-    for (String key : autoKeys) {
-      autoMessages[i] = autoSection.getString(key);
-      i++;
-    }
-
-    i = 0;
-    for (String key : joinKeys) {
-      joinMessages[i] = joinSection.getString(key);
-      i++;
-    }
-
-    i = 0;
-    for (String key : firstJoinKeys) {
-      firstJoinMessages[i] = firstJoinSection.getString(key);
-      i++;
-
-    }
-
+    autoMessages = getStrings(autoSection);
+    joinMessages = getStrings(joinSection);
+    firstJoinMessages = getStrings(firstJoinSection);
+    
     if (executor != null && !executor.isShutdown()) {
       executor.shutdownNow();
     }
@@ -81,6 +54,24 @@ public class AutoMessages {
 
     AuroraChat.getInstance().getLogger().log(Level.INFO, "AutoMessages module reloaded");
   }
+
+  private static String[] getStrings(ConfigurationSection section) {
+    if (section == null) {
+      return new String[0];
+    }
+
+    Set<String> keys = section.getKeys(false);
+    String[] strings = new String[keys.size()];
+
+    int i = 0;
+    for (String key : keys) {
+      strings[i] = section.getString(key);
+      i++;
+    }
+
+    return strings;
+  }
+
 
   public static void sendJoinMessages(PlayerJoinEvent event) {
     Player player = event.getPlayer();
