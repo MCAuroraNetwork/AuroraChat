@@ -1,7 +1,6 @@
 package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.AuroraChat;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -22,6 +21,10 @@ public class AutoMessages {
   private static String[] firstJoinMessages;
 
   private static final Runnable sendAutoMessage = () -> {
+    if (!AuroraChat.getInstance().getConfig().getBoolean("message-commands.enable")) {
+      return;
+    }
+
     String message = autoMessages[new Random().nextInt(autoMessages.length - 1)];
 
     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -41,7 +44,7 @@ public class AutoMessages {
     autoMessages = getStrings(autoSection);
     joinMessages = getStrings(joinSection);
     firstJoinMessages = getStrings(firstJoinSection);
-    
+
     if (executor != null && !executor.isShutdown()) {
       executor.shutdownNow();
     }
