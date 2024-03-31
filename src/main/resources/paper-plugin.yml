@@ -37,6 +37,12 @@ permissions:
     children:
       aurorachat.command.namecolor: true
 
+  aurorachat.namecolor.gradient:
+    description: Allows changing name color to a gradient
+    default: op
+    children:
+      aurorachat.command.namecolor.gradient: true
+
   aurorachat.default:
     description: Enables use of AuroraChat basic commands
     default: true

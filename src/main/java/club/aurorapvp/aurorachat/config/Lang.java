@@ -45,6 +45,9 @@ public class Lang {
     DEFAULTS.put("name-color-changed",
         "prefix <green>Your name color has been changed to <%1$s><bold>%1$s");
     DEFAULTS.put("unknown-color", "prefix <red>Unknown color!");
+    DEFAULTS.put("set-gradient", "prefix <green>Ready to set gradient! Run '/namecolor [color]' until you've added enough colors, then run '/namecolor done'");
+    DEFAULTS.put("color-added", "prefix <green>Color added!");
+    DEFAULTS.put("gradient-set", "prefix <green> Gradient set!");
     DEFAULTS.put("help", "");
     DEFAULTS.put("help-command",
         """
