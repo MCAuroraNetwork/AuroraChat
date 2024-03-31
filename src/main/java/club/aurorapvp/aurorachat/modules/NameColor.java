@@ -38,6 +38,9 @@ public class NameColor {
       this.reload();
     } else {
       colors.add(NamedTextColor.WHITE);
+
+      displayName = ComponentUtil.createGradient(
+          PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
     }
 
     PLAYER_NAME_COLORS.put(player, this);
