@@ -24,7 +24,7 @@ public class Lang {
   public void generateDefaults() {
     final HashMap<String, String> DEFAULTS = new HashMap<>();
 
-    for (Object path : getYaml().getKeys(false).toArray()) {
+    for (var path : getYaml().getKeys(false).toArray()) {
       if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
           && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
@@ -47,7 +47,7 @@ public class Lang {
     DEFAULTS.put("unknown-color", "prefix <red>Unknown color!");
     DEFAULTS.put("set-gradient", "prefix <green>Ready to set gradient! Run '/namecolor [color]' until you've added enough colors, then run '/namecolor done'");
     DEFAULTS.put("color-added", "prefix <green>Color added!");
-    DEFAULTS.put("gradient-set", "prefix <green> Gradient set!");
+    DEFAULTS.put("gradient-set", "prefix <green>Gradient set!");
     DEFAULTS.put("help", "");
     DEFAULTS.put("help-command",
         """
@@ -69,7 +69,7 @@ public class Lang {
       AuroraChat.getInstance().getLogger().log(Level.SEVERE, "Failed to save lang file", e);
     }
 
-    for (Object path : getYaml().getKeys(false).toArray()) {
+    for (var path : getYaml().getKeys(false).toArray()) {
       if (Objects.requireNonNull(getYaml().getString((String) path)).startsWith("~")
           && Objects.requireNonNull(getYaml().getString((String) path)).endsWith("~")) {
         PLACEHOLDERS.put(
