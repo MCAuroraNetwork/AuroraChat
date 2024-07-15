@@ -6,6 +6,7 @@ import club.aurorapvp.aurorachat.config.Lang;
 import club.aurorapvp.aurorachat.events.EventManager;
 import club.aurorapvp.aurorachat.modules.AutoMessages;
 import club.aurorapvp.aurorachat.modules.ChatCooldown;
+import club.aurorapvp.aurorachat.modules.NameTag;
 import club.aurorapvp.aurorachat.modules.SimilarMessageBlocker;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,6 +42,7 @@ public final class AuroraChat extends JavaPlugin {
 
     // Initialize classes
     EventManager.init();
+    NameTag.init();
     CommandManager.init();
     AutoMessages.reload();
     ChatCooldown.reload();
