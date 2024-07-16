@@ -1,69 +1,186 @@
 package club.aurorapvp.aurorachat.modules;
 
-import java.util.HashMap;
-import java.util.Map;
+import club.aurorapvp.aurorachat.AuroraChat;
+import club.aurorapvp.aurorachat.util.TextParser;
+import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
+import org.bukkit.Color;
+import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.entity.TextDisplay;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Transformation;
+import org.joml.AxisAngle4f;
 
 public class NameTag {
 
-  private static final Map<Player, NameTag> NAME_TAGS = new HashMap<>();
-  private static Team team;
-  private final NameColor color;
-  private final Entity nametag;
+  public static final NamespacedKey KEY = new NamespacedKey(AuroraChat.getInstance(), "nametag");
+  protected boolean hide = false;
+  private final DisplayContent content;
+  private final UUID uuid;
+  private boolean visibleForOwner = false;
 
-  public NameTag(Player player, NameColor color) {
-    this.color = color;
-    this.nametag = player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+  private TextDisplay textDisplay;
 
-    team.addPlayer(player);
-    nametag.setCustomNameVisible(true);
-    nametag.setGravity(false);
-    nametag.setNoPhysics(true);
-    nametag.setInvisible(true);
-    nametag.setSilent(true);
-    nametag.setInvulnerable(true);
-    nametag.customName(color.getDisplayName());
-
-
-
-    NAME_TAGS.put(player, this);
+  public NameTag(UUID uuid, DisplayContent content) {
+    this.uuid = uuid;
+    this.content = content;
   }
 
-  public static void init() {
-    Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-    team = scoreboard.getTeam("AuroraChat");
+  public DisplayContent getContent() {
+    return content;
+  }
 
-    if (team == null) {
-      team = scoreboard.registerNewTeam("AuroraChat");
+  protected TextDisplay getEntity() {
+    return textDisplay;
+  }
+
+  private void createDisplayEntity() {
+    if ((textDisplay != null && !textDisplay.isDead())
+        || this.content == null
+        || content.getCurrentFrame().text() == null) {
+      return;
     }
 
-    team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+    Player player = Bukkit.getPlayer(uuid);
+
+    if (player == null) {
+      return;
+    }
+
+    this.textDisplay =
+        (TextDisplay)
+            player
+                .getWorld()
+                .spawnEntity(
+                    player.getEyeLocation(),
+                    EntityType.TEXT_DISPLAY,
+                    CreatureSpawnEvent.SpawnReason.CUSTOM,
+                    entity -> {
+                      TextDisplay textDisplay = (TextDisplay) entity;
+                      textDisplay
+                          .getPersistentDataContainer()
+                          .set(KEY, PersistentDataType.STRING, player.getName());
+                      textDisplay.setInvulnerable(true);
+                      textDisplay.setPersistent(false);
+                      textDisplay.setAlignment(TextDisplay.TextAlignment.CENTER);
+                      textDisplay.setBillboard(this.content.getBillboard());
+                      textDisplay.setSeeThrough(this.content.getSeeThrough());
+                      textDisplay.setViewRange(content.getViewRange());
+                      textDisplay.setShadowRadius(0);
+                      textDisplay.setInterpolationDuration(content.getInterpolationDuration());
+                      textDisplay.setInterpolationDelay(content.getInterpolationDelay());
+                      textDisplay.setShadowed(content.getCurrentFrame().shadowed());
+                      textDisplay.setTextOpacity(content.getCurrentFrame().textOpacity());
+
+                      Color backgroundColor = this.content.getCurrentFrame().backgroundColor();
+                      if (backgroundColor != null) textDisplay.setBackgroundColor(backgroundColor);
+
+                      textDisplay.text(parseText(this.content.getCurrentFrame().text(), player));
+
+                      textDisplay.setTransformation(
+                          new Transformation(
+                              content.getCurrentFrame().offset(),
+                              new AxisAngle4f(0, 0, 0, 0),
+                              content.getCurrentFrame().scale(),
+                              new AxisAngle4f(0, 0, 0, 0)));
+                    });
+
+    if (!this.visibleForOwner) {
+      player.hideEntity(AuroraChat.getInstance(), textDisplay);
+    }
+    player.addPassenger(textDisplay);
+  }
+
+  public void setVisibleForOwner(boolean visible) {
+    this.visibleForOwner = visible;
+
+    if (textDisplay == null || textDisplay.isDead()) {
+      return;
+    }
+
+    Player player = Bukkit.getPlayer(uuid);
+
+    if (player == null) {
+      return;
+    }
+
+    if (visible) {
+      player.showEntity(AuroraChat.getInstance(), textDisplay);
+    } else {
+      player.hideEntity(AuroraChat.getInstance(), textDisplay);
+    }
   }
 
   public void update() {
-    nametag.customName(color.getDisplayName());
+    if (hide) {
+      remove();
+      return;
+    }
+
+    Player player = Bukkit.getPlayer(uuid);
+
+    if (player == null
+        || player.isDead()
+        || content.getCurrentFrame().text() == null
+        || player.isSneaking()
+        || player.getGameMode() == GameMode.SPECTATOR
+        || player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+      remove();
+      return;
+    }
+
+    createDisplayEntity();
+
+    if (textDisplay == null || textDisplay.isDead()) {
+      return;
+    }
+
+    if (!player.getPassengers().contains(textDisplay)) {
+      player.addPassenger(textDisplay);
+    }
+
+    textDisplay.text(parseText(this.content.getCurrentFrame().text(), player));
+
+    textDisplay.setBillboard(this.content.getBillboard());
+    textDisplay.setShadowed(content.getCurrentFrame().shadowed());
+    textDisplay.setTextOpacity(content.getCurrentFrame().textOpacity());
+    textDisplay.setTransformation(
+        new Transformation(
+            content.getCurrentFrame().offset(),
+            new AxisAngle4f(0, 0, 0, 0),
+            content.getCurrentFrame().scale(),
+            new AxisAngle4f(0, 0, 0, 0)));
+
+    Color backgroundColor = this.content.getCurrentFrame().backgroundColor();
+
+    if (backgroundColor == null) {
+      textDisplay.setDefaultBackground(true);
+    } else {
+      textDisplay.setBackgroundColor(backgroundColor);
+    }
+
+    setVisibleForOwner(this.visibleForOwner);
   }
 
-  public void onMove(PlayerMoveEvent event) {
-    nametag.teleportAsync(event.getPlayer().getLocation());
+  protected void remove() {
+    if (textDisplay == null || textDisplay.isDead()) {
+      return;
+    }
+
+    textDisplay.remove();
   }
 
-  public void onSneak(PlayerToggleSneakEvent event) {
-    nametag.setSneaking(event.isSneaking());
-  }
+  private Component parseText(String text, Player player) {
+    if (player == null || !player.isOnline()) {
+      return Component.empty();
+    }
 
-  public static void remove(Player player) {
-    NAME_TAGS.remove(player).nametag.remove();
-  }
-
-  public static NameTag getNameTag(Player player) {
-    return NAME_TAGS.get(player);
+    return TextParser.parseWithPlaceholders(text, player);
   }
 }

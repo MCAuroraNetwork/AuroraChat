@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.papermc.paperweight.userdev' version '1.7.1'
     id 'io.github.goooler.shadow' version '8.1.7'
 }
 
@@ -17,6 +18,9 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
     maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
         url = 'https://repo.aikar.co/content/groups/aikar/'
     }
     maven {
@@ -25,10 +29,14 @@ repositories {
 }
 
 dependencies {
+    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
+
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
 
     compileOnly 'io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT'
-    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+
 }
 
 build {

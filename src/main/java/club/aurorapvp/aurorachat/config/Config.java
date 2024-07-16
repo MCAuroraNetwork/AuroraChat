@@ -31,6 +31,10 @@ public class Config {
     DEFAULTS.put("antispam.cooldown.time", 0);
     DEFAULTS.put("antispam.cooldown.max-violations", 6);
     DEFAULTS.put("antispam.cooldown.violations-expire", 5);
+    DEFAULTS.put("nametag.default.refresh-rate", 10);
+    DEFAULTS.put("nametag.default.billboard", "center");
+    DEFAULTS.put("nametag.default.frames.1.text", "<placeholder:displayname>");
+    DEFAULTS.put("nametag.default.frames.1.offset-y", 0.2);
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().isSet(path) || getYaml().getString(path) == null) {

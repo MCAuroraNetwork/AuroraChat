@@ -4,10 +4,8 @@ import club.aurorapvp.aurorachat.commands.CommandManager;
 import club.aurorapvp.aurorachat.config.Config;
 import club.aurorapvp.aurorachat.config.Lang;
 import club.aurorapvp.aurorachat.events.EventManager;
-import club.aurorapvp.aurorachat.modules.AutoMessages;
-import club.aurorapvp.aurorachat.modules.ChatCooldown;
-import club.aurorapvp.aurorachat.modules.NameTag;
-import club.aurorapvp.aurorachat.modules.SimilarMessageBlocker;
+import club.aurorapvp.aurorachat.modules.*;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +15,7 @@ public final class AuroraChat extends JavaPlugin {
   private static AuroraChat INSTANCE;
   private Config config;
   private Lang lang;
+  private boolean placeholderApiInstalled = false;
 
   public static AuroraChat getInstance() {
     return INSTANCE;
@@ -24,6 +23,10 @@ public final class AuroraChat extends JavaPlugin {
 
   public Lang getLang() {
     return lang;
+  }
+
+  public boolean isPlaceholderApiInstalled() {
+    return placeholderApiInstalled;
   }
 
   public @NotNull YamlConfiguration getConfig() {
@@ -42,24 +45,27 @@ public final class AuroraChat extends JavaPlugin {
 
     // Initialize classes
     EventManager.init();
-    NameTag.init();
     CommandManager.init();
+    NameTagManager.init();
+    TeamManager.init();
     AutoMessages.reload();
     ChatCooldown.reload();
     SimilarMessageBlocker.reload();
 
-    getLogger().info(
-        "AuroraChat enabled in " + (System.currentTimeMillis() - startTime) +
-            "ms");
+    // Check depends
+    if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+      placeholderApiInstalled = true;
+    }
+
+    getLogger().info("AuroraChat enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
   @Override
   public void onDisable() {
     long startTime = System.currentTimeMillis();
 
-    getLogger().info(
-        "AuroraChat disabled in " + (System.currentTimeMillis() - startTime) +
-            "ms");  }
+    getLogger().info("AuroraChat disabled in " + (System.currentTimeMillis() - startTime) + "ms");
+  }
 
   public void reloadConfig() {
     config.reload();
