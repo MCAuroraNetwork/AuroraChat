@@ -39,8 +39,9 @@ public class NameColor {
     } else {
       colors.add(NamedTextColor.WHITE);
 
-      displayName = ComponentUtil.createGradient(
-          PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
+      displayName =
+          ComponentUtil.createGradient(
+              PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
     }
 
     PLAYER_NAME_COLORS.put(player, this);
@@ -94,8 +95,8 @@ public class NameColor {
     }
 
     for (TextColor color : colors) {
-      if (!Objects.equals(color, NamedTextColor.WHITE) && !player.hasPermission(
-          "moneyprinter.namecolor")) {
+      if (!Objects.equals(color, NamedTextColor.WHITE)
+          && !player.hasPermission("moneyprinter.namecolor")) {
         colors.clear();
         colors.add(NamedTextColor.WHITE);
 
@@ -103,8 +104,9 @@ public class NameColor {
       }
     }
 
-    displayName = ComponentUtil.createGradient(
-        PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
+    displayName =
+        ComponentUtil.createGradient(
+            PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
   }
 
   public static NameColor getNameColor(Player player) {
@@ -113,38 +115,58 @@ public class NameColor {
 
   public static class ChatFormatter {
 
-    private static final Chat chat = Objects.requireNonNull(
-        Bukkit.getServer().getServicesManager().getRegistration(Chat.class)).getProvider();
+    private static final Chat chat =
+        Objects.requireNonNull(Bukkit.getServer().getServicesManager().getRegistration(Chat.class))
+            .getProvider();
 
+    // TODO use lang
     public static void onJoin(PlayerJoinEvent event) {
       Player player = event.getPlayer();
+      String prefix = chat.getPlayerPrefix(player);
+      String suffix = chat.getPlayerSuffix(player);
       Component displayName = NameColor.getNameColor(player).getDisplayName();
 
-      Component formattedJoinMessage = displayName.append(
-          MiniMessage.miniMessage().deserialize("<reset><yellow> has joined the game."));
+      Component formattedJoinMessage =
+          MiniMessage.miniMessage()
+              .deserialize(prefix + "<reset> ")
+              .append(displayName)
+              .append(MiniMessage.miniMessage().deserialize(suffix + "<reset> "))
+              .append(
+                  MiniMessage.miniMessage().deserialize("<reset><yellow> has joined the game."));
 
       event.joinMessage(formattedJoinMessage);
     }
 
+    // TODO use lang
     public static void onQuit(PlayerQuitEvent event) {
       Player player = event.getPlayer();
+      String prefix = chat.getPlayerPrefix(player);
+      String suffix = chat.getPlayerSuffix(player);
       Component displayName = NameColor.getNameColor(player).getDisplayName();
 
-      Component formattedQuitMessage = displayName.append(
-          MiniMessage.miniMessage().deserialize("<reset><yellow> has left the game."));
+      Component formattedQuitMessage =
+          MiniMessage.miniMessage()
+              .deserialize(prefix + "<reset> ")
+              .append(displayName)
+              .append(MiniMessage.miniMessage().deserialize(suffix + "<reset> "))
+              .append(MiniMessage.miniMessage().deserialize("<yellow> has left the game."));
 
       event.quitMessage(formattedQuitMessage);
     }
 
+    // TODO use lang
     public static void onChat(AsyncChatEvent event) {
       Player player = event.getPlayer();
       String prefix = chat.getPlayerPrefix(player);
       String suffix = chat.getPlayerSuffix(player);
       Component displayName = NameColor.getNameColor(player).getDisplayName();
 
-      Component formattedMessage = MiniMessage.miniMessage().deserialize(prefix + " <reset><")
-          .append(displayName).append(MiniMessage.miniMessage().deserialize(suffix + "> <reset>"))
-          .append(event.message());
+      Component formattedMessage =
+          MiniMessage.miniMessage()
+              .deserialize(prefix + " <reset><")
+              .append(displayName)
+              .append(MiniMessage.miniMessage().deserialize(suffix + "> <reset>"))
+              .append(event.message());
 
       event.renderer((source, sourceDisplayName, formatted, isNameMentioned) -> formattedMessage);
     }
@@ -172,4 +194,3 @@ public class NameColor {
     }
   }
 }
-
