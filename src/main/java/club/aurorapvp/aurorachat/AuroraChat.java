@@ -57,8 +57,6 @@ public final class AuroraChat extends JavaPlugin {
       placeholderApiInstalled = true;
     }
 
-    // TODO for 1.21: force entitiesWithPassengersCanUsePortals to true (or shut down if it isn't?)
-
     getLogger().info("AuroraChat enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }
 
