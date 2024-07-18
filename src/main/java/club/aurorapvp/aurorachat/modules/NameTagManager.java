@@ -4,16 +4,10 @@ import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.util.BoundingBox;
 
 public class NameTagManager {
 
@@ -91,52 +85,12 @@ public class NameTagManager {
 
   public static void onPlayerTeleport(PlayerTeleportEvent event) {
     NameTag nametag = NAMETAGS.get(event.getPlayer().getUniqueId());
+
     if (nametag == null) {
       return;
     }
 
     nametag.remove();
-  }
-
-  public static void onPlayerMove(PlayerMoveEvent event) {
-    Player player = event.getPlayer();
-
-    if (!event.hasChangedPosition()) {
-      return;
-    }
-
-    NameTag nametag = NAMETAGS.get(event.getPlayer().getUniqueId());
-
-    if (nametag == null) {
-      return;
-    }
-
-    BoundingBox box = player.getBoundingBox();
-
-    World world = player.getWorld();
-    Location loc1 = new Location(world, box.getMaxX(), box.getMaxY(), box.getMaxZ());
-    Location loc2 = loc1.clone().subtract(0, 1, 0);
-    Location loc3 = new Location(world, box.getMinX(), box.getMinY(), box.getMinZ());
-    Location loc4 = loc3.clone().add(0, 1, 0);
-
-    boolean inPortal = false;
-    for (Location loc : new Location[] {loc1, loc2, loc3, loc4}) {
-      Block block = loc.getBlock();
-      if (block.getType() == Material.NETHER_PORTAL
-          || block.getType() == Material.END_PORTAL
-          || block.getType() == Material.END_GATEWAY) {
-        inPortal = true;
-        break;
-      }
-    }
-
-    if (inPortal) {
-      nametag.remove();
-      nametag.hide = true;
-      return;
-    }
-
-    nametag.hide = false;
   }
 
   public static void reloadNameTags() {
