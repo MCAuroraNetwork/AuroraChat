@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent;
 
 public class NameTagManager {
 
@@ -76,6 +77,7 @@ public class NameTagManager {
   public static void onPlayerJoin(PlayerJoinEvent event) {
     UUID joinerUuid = event.getPlayer().getUniqueId();
     DisplayContent displayContent = DisplayContent.createDisplayContent();
+
     if (displayContent == null) {
       return;
     }
@@ -93,9 +95,29 @@ public class NameTagManager {
     nametag.remove();
   }
 
+  public static void onPlayerTeleportHindered(EntityTeleportHinderedEvent event) {
+    if (!(event.getEntity() instanceof Player player)) {
+      return;
+    }
+
+    if (event.getReason() != EntityTeleportHinderedEvent.Reason.IS_VEHICLE) {
+      return;
+    }
+
+    NameTag nameplate = NAMETAGS.get(player.getUniqueId());
+
+    if (nameplate == null) {
+      return;
+    }
+
+    nameplate.remove();
+    event.setShouldRetry(true);
+  }
+
   public static void reloadNameTags() {
     NAMETAGS.values().forEach(NameTag::remove);
     NAMETAGS.clear();
+
     for (Player player : Bukkit.getOnlinePlayers()) {
       NAMETAGS.put(
           player.getUniqueId(),
