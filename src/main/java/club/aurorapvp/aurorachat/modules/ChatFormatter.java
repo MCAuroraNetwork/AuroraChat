@@ -3,7 +3,9 @@ package club.aurorapvp.aurorachat.modules;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -56,6 +58,14 @@ public class ChatFormatter {
     String prefix = chat.getPlayerPrefix(player);
     String suffix = chat.getPlayerSuffix(player);
     Component displayName = NameColor.getNameColor(player).getDisplayName();
+
+    if (event.getPlayer().hasPermission("aurorachat.greentext")) {
+      String message = PlainTextComponentSerializer.plainText().serialize(event.message());
+
+      if (message.startsWith(">")) {
+        event.message(event.message().color(NamedTextColor.GREEN));
+      }
+    }
 
     Component formattedMessage =
         MiniMessage.miniMessage()

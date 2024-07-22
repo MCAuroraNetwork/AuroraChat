@@ -43,6 +43,10 @@ permissions:
     children:
       aurorachat.command.namecolor.gradient: true
 
+  aurorachat.greentext:
+    description: Enables the use of '>' for greentext
+    default: op
+
   aurorachat.default:
     description: Enables use of AuroraChat basic commands
     default: true
