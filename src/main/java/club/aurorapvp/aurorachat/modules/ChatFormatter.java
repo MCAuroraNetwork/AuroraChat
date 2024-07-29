@@ -25,12 +25,14 @@ public class ChatFormatter {
     String suffix = chat.getPlayerSuffix(player);
     Component displayName = NameColor.getNameColor(player).getDisplayName();
 
-    Component formattedJoinMessage =
+    displayName =
         MiniMessage.miniMessage()
-            .deserialize(prefix + "<reset> ")
+            .deserialize(prefix)
             .append(displayName)
-            .append(MiniMessage.miniMessage().deserialize(suffix + "<reset> "))
-            .append(MiniMessage.miniMessage().deserialize("<reset><yellow> has joined the game."));
+            .append(MiniMessage.miniMessage().deserialize(suffix));
+
+    Component formattedJoinMessage =
+        displayName.append(MiniMessage.miniMessage().deserialize("<yellow> has joined the game."));
 
     event.joinMessage(formattedJoinMessage);
   }
@@ -42,12 +44,14 @@ public class ChatFormatter {
     String suffix = chat.getPlayerSuffix(player);
     Component displayName = NameColor.getNameColor(player).getDisplayName();
 
-    Component formattedQuitMessage =
+    displayName =
         MiniMessage.miniMessage()
-            .deserialize(prefix + "<reset> ")
+            .deserialize(prefix)
             .append(displayName)
-            .append(MiniMessage.miniMessage().deserialize(suffix + "<reset> "))
-            .append(MiniMessage.miniMessage().deserialize("<yellow> has left the game."));
+            .append(MiniMessage.miniMessage().deserialize(suffix));
+
+    Component formattedQuitMessage =
+        displayName.append(MiniMessage.miniMessage().deserialize("<yellow> has left the game."));
 
     event.quitMessage(formattedQuitMessage);
   }
@@ -67,12 +71,16 @@ public class ChatFormatter {
       }
     }
 
-    Component formattedMessage =
+    displayName =
         MiniMessage.miniMessage()
-            .deserialize(prefix + " <reset><")
+            .deserialize(prefix)
+            .append(MiniMessage.miniMessage().deserialize("<"))
             .append(displayName)
-            .append(MiniMessage.miniMessage().deserialize(suffix + "> <reset>"))
-            .append(event.message());
+            .append(MiniMessage.miniMessage().deserialize(">"))
+            .append(MiniMessage.miniMessage().deserialize(suffix))
+            .append(MiniMessage.miniMessage().deserialize(" "));
+
+    Component formattedMessage = displayName.append(event.message());
 
     event.renderer((source, sourceDisplayName, formatted, isNameMentioned) -> formattedMessage);
   }
