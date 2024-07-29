@@ -48,6 +48,11 @@ public class TextParser {
 
               return Tag.selfClosingInserting(MiniMessage.miniMessage().deserialize(suffix));
             }
+            case "health" -> {
+              double health = player.getHealth() + player.getAbsorptionAmount();
+
+              return Tag.selfClosingInserting(Component.text(health));
+            }
             default -> {
               if (!AuroraChat.getInstance().isPlaceholderApiInstalled()) {
                 return Tag.selfClosingInserting(Component.text(placeholder));
