@@ -4,6 +4,7 @@ import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -96,21 +97,22 @@ public class NameTagManager {
   }
 
   public static void onPlayerTeleportHindered(EntityTeleportHinderedEvent event) {
-    if (!(event.getEntity() instanceof Player player)) {
+    if (!(event.getEntity() instanceof Player player)
+        || event.getReason() != EntityTeleportHinderedEvent.Reason.IS_VEHICLE) {
       return;
     }
 
-    if (event.getReason() != EntityTeleportHinderedEvent.Reason.IS_VEHICLE) {
+    NameTag nametag = NAMETAGS.get(player.getUniqueId());
+
+    if (nametag == null) {
       return;
     }
 
-    NameTag nameplate = NAMETAGS.get(player.getUniqueId());
-
-    if (nameplate == null) {
-      return;
+    for (Entity entity : player.getPassengers()) {
+      player.removePassenger(entity);
     }
 
-    nameplate.remove();
+    nametag.remove();
     event.setShouldRetry(true);
   }
 
