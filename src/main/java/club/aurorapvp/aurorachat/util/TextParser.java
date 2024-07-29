@@ -49,7 +49,7 @@ public class TextParser {
               return Tag.selfClosingInserting(MiniMessage.miniMessage().deserialize(suffix));
             }
             case "health" -> {
-              double health = player.getHealth() + player.getAbsorptionAmount();
+              int health = (int) (player.getHealth() + player.getAbsorptionAmount());
 
               return Tag.selfClosingInserting(Component.text(health));
             }
