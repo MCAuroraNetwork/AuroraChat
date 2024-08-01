@@ -64,6 +64,8 @@ public class NameColor {
     colors.clear();
 
     colors.add(NamedTextColor.NAMES.value(colorName));
+
+    this.updateDisplayName();
   }
 
   public void setDefaultColor(String colorName) {
@@ -72,12 +74,16 @@ public class NameColor {
     colors.add(NamedTextColor.NAMES.value(colorName));
 
     data.save();
+
+    this.updateDisplayName();
   }
 
   public void setColor(TextColor color) {
     colors.clear();
 
     colors.add(color);
+
+    this.updateDisplayName();
   }
 
   public void setDefaultColor(TextColor color) {
@@ -86,12 +92,16 @@ public class NameColor {
     colors.add(color);
 
     data.save();
+
+    this.updateDisplayName();
   }
 
   public void setGradient(List<TextColor> colors) {
     this.colors.clear();
 
     this.colors.addAll(colors);
+
+    this.updateDisplayName();
   }
 
   public void setDefaultGradient(List<TextColor> colors) {
@@ -100,6 +110,14 @@ public class NameColor {
     this.colors.addAll(colors);
 
     data.save();
+
+    this.updateDisplayName();
+  }
+
+  public void updateDisplayName() {
+    displayName =
+        ComponentUtil.createGradient(
+            PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
   }
 
   public void reload() {
@@ -119,9 +137,7 @@ public class NameColor {
       }
     }
 
-    displayName =
-        ComponentUtil.createGradient(
-            PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
+    this.updateDisplayName();
   }
 
   public static NameColor getNameColor(Player player) {
