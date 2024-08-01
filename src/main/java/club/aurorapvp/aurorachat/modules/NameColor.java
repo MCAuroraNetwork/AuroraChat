@@ -2,12 +2,7 @@ package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.datahandlers.NameColorDataHandler;
 import club.aurorapvp.aurorachat.util.ComponentUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;

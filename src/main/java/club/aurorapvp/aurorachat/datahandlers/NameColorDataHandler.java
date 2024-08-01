@@ -22,7 +22,10 @@ public class NameColorDataHandler {
   public List<String> getColorCodes() {
     String colorNames = container.get(key, PersistentDataType.STRING);
 
-    assert colorNames != null;
+    if (colorNames == null) {
+      return List.of("WHITE");
+    }
+
     return List.of(colorNames.split(","));
   }
 
