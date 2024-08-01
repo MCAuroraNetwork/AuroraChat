@@ -43,60 +43,60 @@ public class NameTag {
   public static void init() {
     reloadNameTags();
     Bukkit.getScheduler()
-            .runTaskTimer(
-                    AuroraChat.getInstance(), () -> NAMETAGS.values().forEach(NameTag::update), 0, 1);
+        .runTaskTimer(
+            AuroraChat.getInstance(), () -> NAMETAGS.values().forEach(NameTag::update), 0, 1);
 
     Bukkit.getScheduler()
-            .runTaskTimer(
-                    AuroraChat.getInstance(),
-                    () ->
-                            Bukkit.getWorlds()
-                                    .forEach(
-                                            world ->
-                                                    world
-                                                            .getEntities()
-                                                            .forEach(
-                                                                    entity -> {
-                                                                      if (!(entity instanceof TextDisplay textDisplay)
-                                                                              || !textDisplay
-                                                                              .getPersistentDataContainer()
-                                                                              .has(NameTag.KEY)) {
-                                                                        return;
-                                                                      }
+        .runTaskTimer(
+            AuroraChat.getInstance(),
+            () ->
+                Bukkit.getWorlds()
+                    .forEach(
+                        world ->
+                            world
+                                .getEntities()
+                                .forEach(
+                                    entity -> {
+                                      if (!(entity instanceof TextDisplay textDisplay)
+                                          || !textDisplay
+                                              .getPersistentDataContainer()
+                                              .has(NameTag.KEY)) {
+                                        return;
+                                      }
 
-                                                                      for (NameTag nametag : NAMETAGS.values()) {
-                                                                        if (nametag.getEntity() == textDisplay) {
-                                                                          return;
-                                                                        }
-                                                                      }
-                                                                      textDisplay.remove();
-                                                                    })),
-                    100,
-                    100);
-
-    Bukkit.getScheduler()
-            .runTaskTimerAsynchronously(
-                    AuroraChat.getInstance(),
-                    () -> {
-                      time++;
-
-                      NAMETAGS
-                              .values()
-                              .forEach(
-                                      nameTag -> {
-                                        DisplayContent content = nameTag.getContent();
-
-                                        if (content == null
-                                                || content.getRefreshRate() <= 0
-                                                || time % content.getRefreshRate() != 0) {
+                                      for (NameTag nametag : NAMETAGS.values()) {
+                                        if (nametag.getEntity() == textDisplay) {
                                           return;
                                         }
+                                      }
+                                      textDisplay.remove();
+                                    })),
+            100,
+            100);
 
-                                        content.advanceFrame();
-                                      });
-                    },
-                    1,
-                    1);
+    Bukkit.getScheduler()
+        .runTaskTimerAsynchronously(
+            AuroraChat.getInstance(),
+            () -> {
+              time++;
+
+              NAMETAGS
+                  .values()
+                  .forEach(
+                      nameTag -> {
+                        DisplayContent content = nameTag.getContent();
+
+                        if (content == null
+                            || content.getRefreshRate() <= 0
+                            || time % content.getRefreshRate() != 0) {
+                          return;
+                        }
+
+                        content.advanceFrame();
+                      });
+            },
+            1,
+            1);
   }
 
   public static void onPlayerJoin(PlayerJoinEvent event) {
@@ -122,7 +122,7 @@ public class NameTag {
 
   public static void onPlayerTeleportHindered(EntityTeleportHinderedEvent event) {
     if (!(event.getEntity() instanceof Player player)
-            || event.getReason() != EntityTeleportHinderedEvent.Reason.IS_VEHICLE) {
+        || event.getReason() != EntityTeleportHinderedEvent.Reason.IS_VEHICLE) {
       return;
     }
 
@@ -146,8 +146,8 @@ public class NameTag {
 
     for (Player player : Bukkit.getOnlinePlayers()) {
       NAMETAGS.put(
-              player.getUniqueId(),
-              new NameTag(player.getUniqueId(), DisplayContent.createDisplayContent()));
+          player.getUniqueId(),
+          new NameTag(player.getUniqueId(), DisplayContent.createDisplayContent()));
     }
   }
 

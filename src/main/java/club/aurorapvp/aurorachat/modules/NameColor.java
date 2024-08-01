@@ -69,11 +69,37 @@ public class NameColor {
     colors.clear();
 
     colors.add(NamedTextColor.NAMES.value(colorName));
+  }
+
+  public void setDefaultColor(String colorName) {
+    colors.clear();
+
+    colors.add(NamedTextColor.NAMES.value(colorName));
+
+    data.save();
+  }
+
+  public void setColor(TextColor color) {
+    colors.clear();
+
+    colors.add(color);
+  }
+
+  public void setDefaultColor(TextColor color) {
+    colors.clear();
+
+    colors.add(color);
 
     data.save();
   }
 
   public void setGradient(List<TextColor> colors) {
+    this.colors.clear();
+
+    this.colors.addAll(colors);
+  }
+
+  public void setDefaultGradient(List<TextColor> colors) {
     this.colors.clear();
 
     this.colors.addAll(colors);

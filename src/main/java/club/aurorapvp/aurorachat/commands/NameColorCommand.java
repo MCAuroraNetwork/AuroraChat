@@ -10,12 +10,10 @@ import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Name;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import java.util.Objects;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 
 @CommandAlias("namecolor")
@@ -32,7 +30,7 @@ public class NameColorCommand extends BaseCommand {
     NameColor color = NameColor.getNameColor(player);
 
     if (Objects.equals(colorName, "done") && color.isBuildingGradient()) {
-      color.setGradient(color.builder.build());
+      color.setDefaultGradient(color.builder.build());
 
       player.sendMessage(AuroraChat.getInstance().getLang().getComponent("gradient-set"));
       return;
@@ -50,7 +48,7 @@ public class NameColorCommand extends BaseCommand {
       return;
     }
 
-    color.setColor(colorName);
+    color.setDefaultColor(colorName);
 
     player.sendMessage(AuroraChat.getInstance().getLang().formatComponent("name-color-changed",
         StringUtil.convertToNormalTypedLanguage(colorName)));
