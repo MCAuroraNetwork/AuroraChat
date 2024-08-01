@@ -46,7 +46,7 @@ public final class AuroraChat extends JavaPlugin {
     // Initialize classes
     EventManager.init();
     CommandManager.init();
-    NameTagManager.init();
+    NameTag.init();
     TeamManager.init();
     AutoMessages.reload();
     ChatCooldown.reload();
