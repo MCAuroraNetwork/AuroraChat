@@ -14,7 +14,8 @@ public class EventManager {
     try {
       Class.forName("org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent");
 
-      Bukkit.getPluginManager().registerEvents(new NameTagEventListener(), AuroraChat.getInstance());
+      Bukkit.getPluginManager()
+          .registerEvents(new NameTagEventListener(), AuroraChat.getInstance());
     } catch (ClassNotFoundException e) {
       AuroraChat.getInstance().getLogger().log(Level.INFO, "It is recommended to use Purpur!");
     }
