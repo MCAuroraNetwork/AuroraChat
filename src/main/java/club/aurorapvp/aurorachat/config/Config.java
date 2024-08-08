@@ -21,7 +21,6 @@ public class Config {
     final HashMap<String, Object> DEFAULTS = new HashMap<>();
 
     DEFAULTS.put("messages.auto-messages.interval", 300);
-    DEFAULTS.put("message-commands.enable", true);
     DEFAULTS.put("antispam.similarity-detection.enable", true);
     DEFAULTS.put("antispam.similarity-detection.timeout", 180);
     DEFAULTS.put("antispam.similarity-detection.similarity", .80);

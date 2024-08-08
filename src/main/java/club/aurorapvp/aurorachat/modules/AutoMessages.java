@@ -21,10 +21,6 @@ public class AutoMessages {
   private static String[] firstJoinMessages;
 
   private static final Runnable sendAutoMessage = () -> {
-    if (!AuroraChat.getInstance().getConfig().getBoolean("message-commands.enable")) {
-      return;
-    }
-
     String message = autoMessages[new Random().nextInt(autoMessages.length - 1)];
 
     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -38,8 +34,8 @@ public class AutoMessages {
 
     assert messages != null;
     ConfigurationSection autoSection = messages.getConfigurationSection("auto-messages.messages");
-    ConfigurationSection joinSection = messages.getConfigurationSection("join-messages");
-    ConfigurationSection firstJoinSection = messages.getConfigurationSection("first-join-messages");
+    ConfigurationSection joinSection = messages.getConfigurationSection("join-message");
+    ConfigurationSection firstJoinSection = messages.getConfigurationSection("first-join-message");
 
     autoMessages = getStrings(autoSection);
     joinMessages = getStrings(joinSection);
