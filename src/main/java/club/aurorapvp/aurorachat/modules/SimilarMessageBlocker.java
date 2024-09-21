@@ -23,11 +23,15 @@ public class SimilarMessageBlocker {
   private static double messageTimeout;
 
   public static void reload() {
-    violationHandler = new ViolationHandler(
-        AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.violations-expire") * 1000,
-        AuroraChat.getInstance().getConfig().getInt("antispam.cooldown.max-violations"));
-    similarityThreshold = AuroraChat.getInstance().getConfig().getDouble("antispam.similarity-detection.similarity");
-    messageTimeout = AuroraChat.getInstance().getConfig().getDouble("antispam.similarity-detection.timeout");
+    violationHandler =
+        new ViolationHandler(
+            AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.violations-expire")
+                * 1000,
+            AuroraChat.getInstance().getConfig().getInt("antispam.cooldown.max-violations"));
+    similarityThreshold =
+        AuroraChat.getInstance().getConfig().getDouble("antispam.similarity-detection.similarity");
+    messageTimeout =
+        AuroraChat.getInstance().getConfig().getDouble("antispam.similarity-detection.timeout");
 
     AuroraChat.getInstance().getLogger().log(Level.INFO, "ChatCooldown module reloaded");
   }
@@ -42,36 +46,40 @@ public class SimilarMessageBlocker {
 
     String messageContent = PlainTextComponentSerializer.plainText().serialize(message);
 
-    if (playerMessages.containsKey(player)) {
-      Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(player);
-
-      for (AbstractMap.SimpleEntry<String, Long> pair : messages) {
-        String oldMessage = pair.getKey();
-        long oldTime = pair.getValue();
-
-        double distance = StringUtil.similarity(messageContent, oldMessage);
-
-        if (distance < similarityThreshold) {
-          break;
-        }
-
-        if (System.currentTimeMillis() - oldTime < messageTimeout * 1000) {
-          if (violationHandler.addViolation(player)) {
-            event.getPlayer().sendMessage(AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
-
-            event.setCancelled(true);
-          }
-          return;
-        } else {
-          messages.remove(pair);
-        }
-      }
-
-      messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
-    } else {
+    if (!playerMessages.containsKey(player)) {
       Set<AbstractMap.SimpleEntry<String, Long>> messages = new HashSet<>();
       messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
       playerMessages.put(player, messages);
+      return;
     }
+
+    Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(player);
+
+    for (AbstractMap.SimpleEntry<String, Long> pair : messages) {
+      String oldMessage = pair.getKey();
+      long oldTime = pair.getValue();
+
+      double similarity = StringUtil.similarity(messageContent, oldMessage);
+
+      if (similarity < similarityThreshold) {
+        break;
+      }
+
+      if (System.currentTimeMillis() - oldTime < messageTimeout * 1000) {
+        if (violationHandler.addViolation(player)) {
+          event
+              .getPlayer()
+              .sendMessage(
+                  AuroraChat.getInstance().getLang().getComponent("message-similarity-violation"));
+
+          event.setCancelled(true);
+        }
+        return;
+      } else {
+        messages.remove(pair);
+      }
+    }
+
+    messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
   }
 }

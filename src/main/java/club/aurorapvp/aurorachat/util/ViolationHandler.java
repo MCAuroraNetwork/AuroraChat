@@ -1,17 +1,14 @@
 package club.aurorapvp.aurorachat.util;
 
-import club.aurorapvp.aurorachat.AuroraChat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
 public class ViolationHandler {
 
   private final Map<Player, Integer> violations = new HashMap<>();
-  private final Map<Player, Timer> nextViolationClear = new HashMap<>();
   private final long expirationDelay;
   protected final int maxViolations;
 
@@ -23,31 +20,22 @@ public class ViolationHandler {
   public boolean addViolation(Player player) {
     violations.put(player, violations.getOrDefault(player, 0) + 1);
 
-    Timer timer = nextViolationClear.get(player);
+    new Timer()
+        .schedule(
+            new TimerTask() {
+              @Override
+              public void run() {
+                removeViolation(player);
 
-    if (timer != null) {
-      timer.cancel();
-    }
-
-    timer = new Timer();
-    timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        clearViolations(player);
-      }
-    }, expirationDelay);
-
-    nextViolationClear.put(player, timer);
+                this.cancel();
+              }
+            },
+            expirationDelay);
 
     return violations.get(player) >= maxViolations;
   }
 
-  private void clearViolations(Player p) {
-    violations.put(p, 0);
-
-    Timer timer = nextViolationClear.remove(p);
-    if (timer != null) {
-      timer.cancel();
-    }
+  private void removeViolation(Player player) {
+    violations.put(player, violations.get(player) - 1);
   }
 }
