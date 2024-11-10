@@ -65,7 +65,7 @@ public class NameTag {
                                       }
 
                                       for (NameTag nametag : NAMETAGS.values()) {
-                                        if (nametag.getEntity() == textDisplay) {
+                                        if (nametag.getEntity().equals(textDisplay)) {
                                           return;
                                         }
                                       }
@@ -248,7 +248,7 @@ public class NameTag {
         || player.isDead()
         || content.getCurrentFrame().text() == null
         || player.isSneaking()
-        || player.getGameMode() == GameMode.SPECTATOR
+        || player.getGameMode().equals(GameMode.SPECTATOR)
         || player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
       remove();
       return;
