@@ -1,8 +1,7 @@
 plugins {
     id 'java'
     id 'io.github.goooler.shadow' version '8.1.8'
-    id("io.papermc.paperweight.userdev") version "1.7.1"
-    id("xyz.jpenilla.run-paper") version "2.3.0"
+    id("io.papermc.paperweight.userdev") version '2.0.0-beta.14'
 }
 
 group = 'AuroraChat'
@@ -33,15 +32,15 @@ repositories {
 }
 
 dependencies {
-    paperweight.devBundle("org.purpurmc.purpur", "1.21-R0.1-SNAPSHOT")
+    paperweight.devBundle("org.purpurmc.purpur", "1.21.4-R0.1-SNAPSHOT")
 
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
 
-    compileOnly("org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT")
-    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
-    // TODO update
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        exclude group: 'org.bukkit', module: 'bukkit'
+    }
     compileOnly 'me.clip:placeholderapi:2.11.6'
-
 }
 
 build {
