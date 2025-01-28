@@ -34,6 +34,8 @@ public class Config {
     DEFAULTS.put("nametag.default.billboard", "center");
     DEFAULTS.put("nametag.default.frames.1.text", "<placeholder:displayname>");
     DEFAULTS.put("nametag.default.frames.1.offset-y", 0.2);
+    DEFAULTS.put("mongodb.database-name", "aurora_chat");
+    DEFAULTS.put("mongodb.address", "mongodb://localhost:27017");
 
     for (String path : DEFAULTS.keySet()) {
       if (!getYaml().isSet(path) || getYaml().getString(path) == null) {

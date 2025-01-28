@@ -2,44 +2,50 @@ package club.aurorapvp.aurorachat.datahandlers;
 
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.modules.NameColor;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.NamespacedKey;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
+import org.bson.Document;
 
 public class NameColorDataHandler {
 
-  private final PersistentDataContainer container;
-  private final NamespacedKey key = new NamespacedKey(AuroraChat.getInstance(), "name-colors");
+  private final MongoCollection<Document> collection;
   private final NameColor color;
+  private final String playerId;
 
   public NameColorDataHandler(NameColor color) {
     this.color = color;
-    this.container = color.getPlayer().getPersistentDataContainer();
+    this.collection = AuroraChat.getInstance().getDatabase().getCollection("name_colors");
+    this.playerId = color.getPlayer().getUniqueId().toString();
   }
 
   public List<String> getColorCodes() {
-    String colorNames = container.get(key, PersistentDataType.STRING);
+    Document playerData = collection.find(Filters.eq("_id", playerId)).first();
 
-    if (colorNames == null) {
+    if (playerData == null || !playerData.containsKey("colorCodes")) {
       return List.of("WHITE");
     }
 
-    return List.of(colorNames.split(","));
+    String colorCodes = playerData.getString("colorCodes");
+    return Arrays.asList(colorCodes.split(","));
   }
 
   public void save() {
-    StringBuilder sb = new StringBuilder();
+    String colorCodes =
+        color.getColors().stream().map(TextColor::asHexString).collect(Collectors.joining(","));
 
-    for (TextColor color : color.getColors()) {
-      sb.append(color.asHexString()).append(",");
-    }
+    Document playerData = new Document().append("_id", playerId).append("colorCodes", colorCodes);
 
-    container.set(key, PersistentDataType.STRING, sb.toString());
+    collection.updateOne(
+        Filters.eq("_id", playerId),
+        new Document("$set", playerData),
+        new com.mongodb.client.model.UpdateOptions().upsert(true));
   }
 
   public boolean exists() {
-    return container.get(key, PersistentDataType.STRING) != null;
+    return collection.find(Filters.eq("_id", playerId)).first() != null;
   }
 }
