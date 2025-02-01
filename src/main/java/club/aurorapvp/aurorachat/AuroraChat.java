@@ -53,6 +53,15 @@ public final class AuroraChat extends JavaPlugin {
     config = new Config();
     lang = new Lang();
 
+    String connectionString =
+        this.getConfig().getString("mongodb.address", "mongodb://localhost:27017");
+    String databaseName = this.getConfig().getString("mongodb.database-name", "aurora_chat");
+
+    mongoClient = MongoClients.create(connectionString);
+    mongoDatabase = mongoClient.getDatabase(databaseName);
+
+    getLogger().info("Connected to MongoDB database: " + databaseName);
+
     // Initialize classes
     EventManager.init();
     CommandManager.init();
@@ -66,13 +75,6 @@ public final class AuroraChat extends JavaPlugin {
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
       placeholderApiInstalled = true;
     }
-
-    String connectionString =
-        this.getConfig().getString("mongodb.address", "mongodb://localhost:27017");
-    String databaseName = this.getConfig().getString("mongodb.database-name", "aurora_chat");
-
-    mongoClient = MongoClients.create(connectionString);
-    mongoDatabase = mongoClient.getDatabase(databaseName);
 
     getLogger().info("AuroraChat enabled in " + (System.currentTimeMillis() - startTime) + "ms");
   }

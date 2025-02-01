@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.datahandlers;
+package club.aurorapvp.aurorachat.data;
 
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.modules.NameColor;

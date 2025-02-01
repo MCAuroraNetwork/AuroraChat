@@ -1,6 +1,6 @@
 package club.aurorapvp.aurorachat.modules;
 
-import club.aurorapvp.aurorachat.datahandlers.NameColorDataHandler;
+import club.aurorapvp.aurorachat.data.NameColorDataHandler;
 import club.aurorapvp.aurorachat.util.ComponentUtil;
 import java.util.*;
 import net.kyori.adventure.text.Component;
