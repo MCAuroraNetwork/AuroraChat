@@ -1,8 +1,11 @@
 package club.aurorapvp.aurorachat.modules;
 
+import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.data.NameColorDataHandler;
 import club.aurorapvp.aurorachat.util.ComponentUtil;
 import java.util.*;
+import java.util.logging.Level;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -123,8 +126,26 @@ public class NameColor {
   public void reload() {
     Collection<String> colorNames = data.getColorCodes();
 
+    colors.clear();
+
     for (String hexCode : colorNames) {
-      colors.add(TextColor.fromHexString(hexCode));
+      TextColor color = TextColor.fromHexString(hexCode);
+
+      if (color != null) {
+        AuroraChat.getInstance().getLogger().log(Level.INFO, "not null: " + hexCode);
+
+        colors.add(color);
+
+        continue;
+      }
+
+      AuroraChat.getInstance().getLogger().log(Level.INFO, "null: " + hexCode);
+    }
+
+    if (colors.isEmpty()) {
+      colors.add(NamedTextColor.WHITE);
+
+      this.updateDisplayName();
     }
 
     for (TextColor color : colors) {
