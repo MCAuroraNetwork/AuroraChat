@@ -132,14 +132,8 @@ public class NameColor {
       TextColor color = TextColor.fromHexString(hexCode);
 
       if (color != null) {
-        AuroraChat.getInstance().getLogger().log(Level.INFO, "not null: " + hexCode);
-
         colors.add(color);
-
-        continue;
       }
-
-      AuroraChat.getInstance().getLogger().log(Level.INFO, "null: " + hexCode);
     }
 
     if (colors.isEmpty()) {
