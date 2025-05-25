@@ -3,9 +3,18 @@ package club.aurorapvp.aurorachat.modules;
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.util.TextParser;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
@@ -33,14 +42,15 @@ public class NameTag {
   private Component cachedParsed = null;
   private String cachedRawText = null;
   private TextDisplay textDisplay;
+  private Set<String> currentPlaceholders = new HashSet<>();
+  private Map<String, String> lastPlaceholderValues = new HashMap<>();
+  private static final HashMap<UUID, NameTag> NAMETAGS = new HashMap<>();
+  private static long time = Long.MIN_VALUE;
 
   public NameTag(UUID uuid, DisplayContent content) {
     this.uuid = uuid;
     this.content = content;
   }
-
-  private static final HashMap<UUID, NameTag> NAMETAGS = new HashMap<>();
-  private static long time = Long.MIN_VALUE;
 
   public static void init() {
     reloadNameTags();
@@ -206,6 +216,8 @@ public class NameTag {
     if (textDisplay == null || textDisplay.isDead()) {
       cachedRawText = content.getCurrentFrame().text();
       cachedParsed = parseText(cachedRawText, player);
+      currentPlaceholders = extractPlaceholders(cachedRawText);
+      updatePlaceholderValues(player);
 
       textDisplay =
           (TextDisplay)
@@ -250,10 +262,29 @@ public class NameTag {
     if (!player.getPassengers().contains(textDisplay)) player.addPassenger(textDisplay);
 
     String currentRawText = content.getCurrentFrame().text();
+
     if (!Objects.equals(currentRawText, cachedRawText)) {
       cachedRawText = currentRawText;
-      cachedParsed = parseText(currentRawText, player);
+      currentPlaceholders = extractPlaceholders(cachedRawText);
+      updatePlaceholderValues(player);
+      cachedParsed = parseText(cachedRawText, player);
       textDisplay.text(cachedParsed);
+    } else {
+      boolean needsUpdate = false;
+      for (String placeholder : currentPlaceholders) {
+        Component currentComponent = getPlaceholderComponent(placeholder, player);
+        String currentSerialized = MiniMessage.miniMessage().serialize(currentComponent);
+        String lastSerialized = lastPlaceholderValues.get(placeholder);
+        if (!Objects.equals(currentSerialized, lastSerialized)) {
+          needsUpdate = true;
+          break;
+        }
+      }
+      if (needsUpdate) {
+        updatePlaceholderValues(player);
+        cachedParsed = parseText(cachedRawText, player);
+        textDisplay.text(cachedParsed);
+      }
     }
 
     textDisplay.setBillboard(content.getBillboard());
@@ -290,5 +321,53 @@ public class NameTag {
     }
 
     return TextParser.parseWithPlaceholders(text, player);
+  }
+
+  private Set<String> extractPlaceholders(String rawText) {
+    Set<String> placeholders = new HashSet<>();
+    Pattern pattern = Pattern.compile("<placeholder:([^>]+)>");
+    Matcher matcher = pattern.matcher(rawText);
+    while (matcher.find()) {
+      placeholders.add(matcher.group(1));
+    }
+    return placeholders;
+  }
+
+  private Component getPlaceholderComponent(String placeholder, Player player) {
+    switch (placeholder) {
+      case "displayname":
+        return player.displayName();
+      case "coloredname":
+        return NameColor.getNameColor(player).getDisplayName();
+      case "prefix":
+        String prefix = ChatFormatter.chat.getPlayerPrefix(player);
+        return MiniMessage.miniMessage().deserialize(prefix);
+      case "suffix":
+        String suffix = ChatFormatter.chat.getPlayerSuffix(player);
+        return MiniMessage.miniMessage().deserialize(suffix);
+      case "health":
+        int health = (int) (player.getHealth() + player.getAbsorptionAmount());
+        return Component.text(health);
+      default:
+        if (AuroraChat.getInstance().isPlaceholderApiInstalled()) {
+          String parsed = PlaceholderAPI.setPlaceholders(player, '%' + placeholder + '%');
+          if (parsed.contains(LegacyComponentSerializer.SECTION_CHAR + "")) {
+            return LegacyComponentSerializer.legacySection().deserialize(parsed);
+          } else {
+            return MiniMessage.miniMessage().deserialize(parsed);
+          }
+        } else {
+          return Component.text(placeholder);
+        }
+    }
+  }
+
+  private void updatePlaceholderValues(Player player) {
+    lastPlaceholderValues.clear();
+    for (String placeholder : currentPlaceholders) {
+      Component component = getPlaceholderComponent(placeholder, player);
+      String serialized = MiniMessage.miniMessage().serialize(component);
+      lastPlaceholderValues.put(placeholder, serialized);
+    }
   }
 }
