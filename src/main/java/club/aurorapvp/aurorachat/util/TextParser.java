@@ -53,6 +53,11 @@ public class TextParser {
 
               return Tag.selfClosingInserting(Component.text(health));
             }
+            case "ping" -> {
+              int ping = player.getPing();
+
+              return Tag.selfClosingInserting(Component.text(ping));
+            }
             default -> {
               if (!AuroraChat.getInstance().isPlaceholderApiInstalled()) {
                 return Tag.selfClosingInserting(Component.text(placeholder));

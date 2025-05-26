@@ -348,6 +348,9 @@ public class NameTag {
       case "health":
         int health = (int) (player.getHealth() + player.getAbsorptionAmount());
         return Component.text(health);
+      case "ping":
+        int ping = player.getPing();
+        return Component.text(ping);
       default:
         if (AuroraChat.getInstance().isPlaceholderApiInstalled()) {
           String parsed = PlaceholderAPI.setPlaceholders(player, '%' + placeholder + '%');
