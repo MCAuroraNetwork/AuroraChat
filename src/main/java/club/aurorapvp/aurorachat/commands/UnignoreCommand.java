@@ -23,7 +23,7 @@ public class UnignoreCommand extends BaseCommand {
       return;
     }
 
-    if (IgnoredPlayers.isIgnoredPlayer(player, recipient)) {
+    if (!IgnoredPlayers.isIgnoredPlayer(player, recipient)) {
       player.sendMessage(AuroraChat.getInstance().getLang().getComponent("player-not-ignored"));
 
       return;
