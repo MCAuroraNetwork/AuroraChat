@@ -16,6 +16,7 @@ public class CommandManager {
     MANAGER.registerCommand(new ReplyCommand());
     MANAGER.registerCommand(new PluginCommands());
     MANAGER.registerCommand(new NameColorCommand());
+    MANAGER.registerCommand(new IgnoreCommand());
 
     CommandCompletions<BukkitCommandCompletionContext> commandCompletions =
         MANAGER.getCommandCompletions();

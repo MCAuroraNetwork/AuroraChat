@@ -44,6 +44,8 @@ public class Lang {
     DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s");
     DEFAULTS.put("name-color-changed",
         "prefix <green>Your name color has been changed to <%1$s><bold>%1$s");
+    DEFAULTS.put("player-ignored", "prefix <yellow>Marked player to be ignored");
+    DEFAULTS.put("player-unignored", "prefix <green>Marked player to be unignored");
     DEFAULTS.put("unknown-color", "prefix <red>Unknown color!");
     DEFAULTS.put("set-gradient", "prefix <green>Ready to set gradient! Run '/namecolor [color]' until you've added enough colors, then run '/namecolor done'");
     DEFAULTS.put("color-added", "prefix <green>Color added!");
