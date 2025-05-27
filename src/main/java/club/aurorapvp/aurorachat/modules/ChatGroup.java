@@ -22,14 +22,28 @@ public class ChatGroup {
 
     Set<Player> allowedRecipients = new HashSet<>();
 
-    for (ChatGroup chatGroup : chatGroups.values()) {
-      if (chatGroup.getMode() == ChatMode.ALL
-          && !chatGroup.getDisallowedPlayers().contains(sender)) {
-        allowedRecipients.add(chatGroup.getPlayer());
-      } else if (chatGroup.getMode() != ChatMode.DISABLED
-          && chatGroup.getAllowedPlayers().contains(sender)
-          && !chatGroup.getDisallowedPlayers().contains(sender)) {
-        allowedRecipients.add(chatGroup.getPlayer());
+    ChatGroup chatGroup = chatGroups.get(sender.getUniqueId());
+
+    if (chatGroup != null && chatGroup.getMode() == ChatMode.SELECT) {
+      event.viewers().retainAll(chatGroup.getAllowedPlayers());
+
+      return;
+    }
+
+    for (ChatGroup group : chatGroups.values()) {
+      if (group.getPlayer().equals(sender)) {
+        allowedRecipients.add(group.getPlayer());
+
+        continue;
+      }
+
+      if (group.getMode() == ChatMode.ALL
+          && !group.getDisallowedPlayers().contains(sender)) {
+        allowedRecipients.add(group.getPlayer());
+      } else if (group.getMode() != ChatMode.DISABLED
+          && group.getAllowedPlayers().contains(sender)
+          && !group.getDisallowedPlayers().contains(sender)) {
+        allowedRecipients.add(group.getPlayer());
       }
     }
 
