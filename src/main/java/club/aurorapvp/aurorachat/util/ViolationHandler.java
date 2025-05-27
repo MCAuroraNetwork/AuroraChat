@@ -1,14 +1,12 @@
 package club.aurorapvp.aurorachat.util;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+
 import org.bukkit.entity.Player;
 
 public class ViolationHandler {
 
-  private final Map<Player, Integer> violations = new HashMap<>();
+  private final Map<UUID, Integer> violations = new HashMap<>();
   private final long expirationDelay;
   protected final int maxViolations;
 
@@ -18,7 +16,7 @@ public class ViolationHandler {
   }
 
   public boolean addViolation(Player player) {
-    violations.put(player, violations.getOrDefault(player, 0) + 1);
+    violations.put(player.getUniqueId(), violations.getOrDefault(player.getUniqueId(), 0) + 1);
 
     new Timer()
         .schedule(
@@ -32,10 +30,10 @@ public class ViolationHandler {
             },
             expirationDelay);
 
-    return violations.get(player) >= maxViolations;
+    return violations.get(player.getUniqueId()) >= maxViolations;
   }
 
   private void removeViolation(Player player) {
-    violations.put(player, violations.get(player) - 1);
+    violations.put(player.getUniqueId(), violations.get(player.getUniqueId()) - 1);
   }
 }

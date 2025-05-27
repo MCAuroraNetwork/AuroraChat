@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class NameColor {
 
-  private static final Map<Player, NameColor> PLAYER_NAME_COLORS = new HashMap<>();
+  private static final Map<UUID, NameColor> PLAYER_NAME_COLORS = new HashMap<>();
   private final Player player;
   private Component displayName;
   private final NameColorDataHandler data;
@@ -36,11 +36,11 @@ public class NameColor {
               PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
     }
 
-    PLAYER_NAME_COLORS.put(player, this);
+    PLAYER_NAME_COLORS.put(player.getUniqueId(), this);
   }
 
   public static void remove(Player player) {
-    PLAYER_NAME_COLORS.remove(player);
+    PLAYER_NAME_COLORS.remove(player.getUniqueId());
   }
 
   public List<TextColor> getColors() {
@@ -156,7 +156,7 @@ public class NameColor {
   }
 
   public static NameColor getNameColor(Player player) {
-    return PLAYER_NAME_COLORS.get(player);
+    return PLAYER_NAME_COLORS.get(player.getUniqueId());
   }
 
   public class GradientBuilder {

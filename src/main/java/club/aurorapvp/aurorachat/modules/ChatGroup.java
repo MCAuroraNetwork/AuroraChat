@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class ChatGroup {
-  public static Map<Player, ChatGroup> chatGroups = new HashMap<>();
+  public static Map<UUID, ChatGroup> chatGroups = new HashMap<>();
   private final Set<Player> allowedPlayers = new HashSet<>();
   private final Set<Player> disallowedPlayers = new HashSet<>();
   private final Player player;
@@ -36,7 +36,7 @@ public class ChatGroup {
   }
 
   public static ChatGroup getChatGroup(Player player) {
-    return chatGroups.computeIfAbsent(player, ChatGroup::new);
+    return chatGroups.computeIfAbsent(player.getUniqueId(), k -> new ChatGroup(player));
   }
 
   public Player getPlayer() {

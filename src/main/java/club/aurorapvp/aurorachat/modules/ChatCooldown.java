@@ -5,12 +5,13 @@ import club.aurorapvp.aurorachat.util.ViolationHandler;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
 public class ChatCooldown {
 
-  private static final Map<Player, Long> timeOfLastMessage = new HashMap<>();
+  private static final Map<UUID, Long> timeOfLastMessage = new HashMap<>();
   private static ViolationHandler violationHandler;
 
   public static void reload() {
@@ -34,12 +35,12 @@ public class ChatCooldown {
       }
     }
 
-    timeOfLastMessage.put(event.getPlayer(), System.currentTimeMillis());
+    timeOfLastMessage.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
   }
 
   public static boolean onCooldown(Player player) {
-    if (timeOfLastMessage.containsKey(player)) {
-      return (timeOfLastMessage.get(player) - System.currentTimeMillis()) <=
+    if (timeOfLastMessage.containsKey(player.getUniqueId())) {
+      return (timeOfLastMessage.get(player.getUniqueId()) - System.currentTimeMillis()) <=
           AuroraChat.getInstance().getConfig().getLong("antispam.cooldown.time") * 1000;
     }
     return false;

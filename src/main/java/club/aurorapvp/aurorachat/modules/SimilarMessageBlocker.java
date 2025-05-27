@@ -4,11 +4,8 @@ import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.util.StringUtil;
 import club.aurorapvp.aurorachat.util.ViolationHandler;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -16,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class SimilarMessageBlocker {
 
-  private static final Map<Player, Set<AbstractMap.SimpleEntry<String, Long>>> playerMessages =
+  private static final Map<UUID, Set<AbstractMap.SimpleEntry<String, Long>>> playerMessages =
       new HashMap<>();
   private static ViolationHandler violationHandler;
   private static double similarityThreshold;
@@ -46,14 +43,14 @@ public class SimilarMessageBlocker {
 
     String messageContent = PlainTextComponentSerializer.plainText().serialize(message);
 
-    if (!playerMessages.containsKey(player)) {
+    if (!playerMessages.containsKey(player.getUniqueId())) {
       Set<AbstractMap.SimpleEntry<String, Long>> messages = new HashSet<>();
       messages.add(new AbstractMap.SimpleEntry<>(messageContent, System.currentTimeMillis()));
-      playerMessages.put(player, messages);
+      playerMessages.put(player.getUniqueId(), messages);
       return;
     }
 
-    Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(player);
+    Set<AbstractMap.SimpleEntry<String, Long>> messages = playerMessages.get(player.getUniqueId());
 
     for (AbstractMap.SimpleEntry<String, Long> pair : messages) {
       String oldMessage = pair.getKey();
