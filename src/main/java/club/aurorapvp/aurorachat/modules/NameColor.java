@@ -156,7 +156,7 @@ public class NameColor {
   }
 
   public static NameColor getNameColor(Player player) {
-    return PLAYER_NAME_COLORS.get(player.getUniqueId());
+    return PLAYER_NAME_COLORS.computeIfAbsent(player.getUniqueId(), k -> new NameColor(player));
   }
 
   public class GradientBuilder {

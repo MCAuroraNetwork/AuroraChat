@@ -13,7 +13,6 @@ public class PlayerEventListener implements Listener {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
-    new NameColor(event.getPlayer());
     AutoMessages.sendJoinMessages(event);
     ChatFormatter.onJoin(event);
     IgnoredPlayers.onJoin(event);
