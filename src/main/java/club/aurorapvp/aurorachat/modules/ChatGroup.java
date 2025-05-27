@@ -1,5 +1,7 @@
 package club.aurorapvp.aurorachat.modules;
 
+import club.aurorapvp.aurorachat.AuroraChat;
+import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 
@@ -15,6 +17,26 @@ public class ChatGroup {
   public ChatGroup(Player player) {
     this.player = player;
     this.mode = ChatMode.ALL;
+  }
+
+  public static void checkDisabled(AsyncChatEvent event) {
+    ChatGroup chatGroup = chatGroups.get(event.getPlayer().getUniqueId());
+
+    if (chatGroup == null || chatGroup.getMode() != ChatMode.DISABLED) {
+      return;
+    }
+
+    event.getPlayer().sendMessage(AuroraChat.getInstance().getLang().getComponent("chat-disabled"));
+
+    event.setCancelled(true);
+  }
+
+  public static void onDiscordChat(GameChatMessagePreProcessEvent event) {
+    ChatGroup chatGroup = ChatGroup.getChatGroup(event.getPlayer());
+
+    if (chatGroup.getMode() != ChatMode.ALL) {
+      event.setCancelled(true);
+    }
   }
 
   public static void onChat(AsyncChatEvent event) {
@@ -37,8 +59,7 @@ public class ChatGroup {
         continue;
       }
 
-      if (group.getMode() == ChatMode.ALL
-          && !group.getDisallowedPlayers().contains(sender)) {
+      if (group.getMode() == ChatMode.ALL && !group.getDisallowedPlayers().contains(sender)) {
         allowedRecipients.add(group.getPlayer());
       } else if (group.getMode() != ChatMode.DISABLED
           && group.getAllowedPlayers().contains(sender)

@@ -1,6 +1,7 @@
 package club.aurorapvp.aurorachat.events.listeners;
 
 import club.aurorapvp.aurorachat.modules.*;
+import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +32,17 @@ public class PlayerEventListener implements Listener {
     ChatFormatter.onChat(event);
   }
 
-  @EventHandler(priority = EventPriority.HIGHEST)
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void checkDisabled(AsyncChatEvent event) {
+    ChatGroup.checkDisabled(event);
+  }
+
+  @EventHandler
+  public void onDiscordChat(GameChatMessagePreProcessEvent event) {
+    ChatGroup.onDiscordChat(event);
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void handleGroupChat(AsyncChatEvent event) {
     ChatGroup.onChat(event);
   }
