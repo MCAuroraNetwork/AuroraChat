@@ -23,7 +23,8 @@ public class ChatGroup {
     Set<Player> allowedRecipients = new HashSet<>();
 
     for (ChatGroup chatGroup : chatGroups.values()) {
-      if (chatGroup.getMode() == ChatMode.ALL) {
+      if (chatGroup.getMode() == ChatMode.ALL
+          && !chatGroup.getDisallowedPlayers().contains(sender)) {
         allowedRecipients.add(chatGroup.getPlayer());
       } else if (chatGroup.getMode() != ChatMode.DISABLED
           && chatGroup.getAllowedPlayers().contains(sender)
