@@ -3,9 +3,7 @@ package club.aurorapvp.aurorachat.modules;
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.data.NameColorDataHandler;
 import club.aurorapvp.aurorachat.util.ComponentUtil;
-import java.util.*;
-import java.util.logging.Level;
-
+import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -32,11 +30,7 @@ public class NameColor {
     if (data.exists()) {
       this.reload();
     } else {
-      colors.add(NamedTextColor.WHITE);
-
-      displayName =
-          ComponentUtil.createGradient(
-              PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
+      colors.add(ExtendedTextColor.WHITE);
     }
   }
 
@@ -74,11 +68,15 @@ public class NameColor {
 
   public void setDefaultColor(String colorName) {
     colors.clear();
-
-    colors.add(NamedTextColor.NAMES.value(colorName));
-
-    data.save();
-
+    colors.add(ExtendedTextColor.NAMES.value(colorName));
+    List<List<TextColor>> frameColors = displayNameManager.getFrameColors();
+    if (frameColors.isEmpty()) {
+      frameColors.add(new ArrayList<>(colors));
+    } else {
+      frameColors.set(0, new ArrayList<>(colors));
+    }
+    displayNameManager.setFrameColors(frameColors);
+    displayNameManager.save();
     this.updateDisplayName();
   }
 
@@ -144,12 +142,13 @@ public class NameColor {
     }
 
     for (TextColor color : colors) {
-      if (!Objects.equals(color, NamedTextColor.WHITE)
-          && !player.hasPermission("moneyprinter.namecolor")) {
+      if (!Objects.equals(color, ExtendedTextColor.WHITE) && !player.hasPermission("moneyprinter.namecolor")) {
         colors.clear();
-        colors.add(NamedTextColor.WHITE);
-
-        data.save();
+        colors.add(ExtendedTextColor.WHITE);
+        List<List<TextColor>> newFrameColors = new ArrayList<>();
+        newFrameColors.add(new ArrayList<>(colors));
+        displayNameManager.setFrameColors(newFrameColors);
+        displayNameManager.save();
       }
     }
 

@@ -3,6 +3,7 @@ package club.aurorapvp.aurorachat.commands;
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.modules.NameColor;
 import club.aurorapvp.aurorachat.modules.NameColor.GradientBuilder;
+import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import club.aurorapvp.aurorachat.util.StringUtil;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -13,7 +14,6 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import java.util.Objects;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 
 @CommandAlias("namecolor")
@@ -36,13 +36,13 @@ public class NameColorCommand extends BaseCommand {
       return;
     }
     
-    if (!NamedTextColor.NAMES.keys().contains(colorName)) {
+    if (!ExtendedTextColor.NAMES.keys().contains(colorName)) {
       player.sendMessage(AuroraChat.getInstance().getLang().getComponent("unknown-color"));
       return;
     }
 
     if (color.isBuildingGradient()) {
-      color.builder.addColor(NamedTextColor.NAMES.value(colorName));
+      color.builder.addColor(ExtendedTextColor.NAMES.value(colorName));
 
       player.sendMessage(AuroraChat.getInstance().getLang().getComponent("color-added"));
       return;

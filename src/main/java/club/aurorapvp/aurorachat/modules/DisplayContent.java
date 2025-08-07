@@ -1,13 +1,18 @@
 package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.AuroraChat;
-import java.util.ArrayList;
-import java.util.List;
+import club.aurorapvp.aurorachat.util.ExtendedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display;
 import org.joml.Vector3f;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DisplayContent {
 
@@ -130,26 +135,28 @@ public class DisplayContent {
                 return;
               }
 
-              String text = frameSection.getString("text", null);
-              String backgroundColor = frameSection.getString("background");
-              float scaleX = (float) frameSection.getDouble("scale-x", 1);
-              float scaleY = (float) frameSection.getDouble("scale-y", 0.2);
-              float scaleZ = (float) frameSection.getDouble("scale-z", 1);
-              float offsetX = (float) frameSection.getDouble("offset-x", 0);
-              float offsetY = (float) frameSection.getDouble("offset-y", 0);
-              float offsetZ = (float) frameSection.getDouble("offset-z", 0);
-              boolean shadowed = frameSection.getBoolean("shadowed", false);
-              byte textOpacity =
-                  (byte) Math.min(Math.max(frameSection.getInt("text-opacity", 255), 0), 255);
-              displayContent.addFrame(
-                  new DisplayFrame(
-                      text,
-                      colorFromHex(backgroundColor),
-                      new Vector3f(scaleX, scaleY, scaleZ),
-                      new Vector3f(offsetX, offsetY, offsetZ),
-                      shadowed,
-                      textOpacity));
-            });
+      String text = frameSection.getString("text", null);
+      String backgroundColor = frameSection.getString("background");
+      float scaleX = (float) frameSection.getDouble("scale-x", 1);
+      float scaleY = (float) frameSection.getDouble("scale-y", 0.2);
+      float scaleZ = (float) frameSection.getDouble("scale-z", 1);
+      float offsetX = (float) frameSection.getDouble("offset-x", 0);
+      float offsetY = (float) frameSection.getDouble("offset-y", 0);
+      float offsetZ = (float) frameSection.getDouble("offset-z", 0);
+      boolean shadowed = frameSection.getBoolean("shadowed", false);
+      byte textOpacity = (byte) Math.min(Math.max(frameSection.getInt("text-opacity", 255), 0), 255);
+
+      List<String> colorStrings = frameSection.getStringList("display-name-colors");
+      List<TextColor> displayNameColors = colorStrings.stream()
+              .map(TextColor::fromHexString)
+              .filter(Objects::nonNull)
+              .collect(Collectors.toList());
+      if (displayNameColors.isEmpty()) {
+        displayNameColors = List.of(ExtendedTextColor.WHITE);
+      }
+
+      displayContent.addFrame(new DisplayFrame(text, colorFromHex(backgroundColor), new Vector3f(scaleX, scaleY, scaleZ), new Vector3f(offsetX, offsetY, offsetZ), shadowed, textOpacity, displayNameColors));
+    }
 
     return displayContent;
   }

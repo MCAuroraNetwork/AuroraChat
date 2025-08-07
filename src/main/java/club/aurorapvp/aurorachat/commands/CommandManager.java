@@ -1,10 +1,10 @@
 package club.aurorapvp.aurorachat.commands;
 
 import club.aurorapvp.aurorachat.AuroraChat;
+import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import co.aikar.commands.BukkitCommandCompletionContext;
 import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.PaperCommandManager;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CommandManager {
 
@@ -24,6 +24,6 @@ public class CommandManager {
 
     commandCompletions.registerCompletion(
         "colorNames",
-        c -> NamedTextColor.NAMES.keys());
+        c -> ExtendedTextColor.NAMES.keys());
   }
 }

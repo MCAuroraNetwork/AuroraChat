@@ -1,18 +1,12 @@
 package club.aurorapvp.aurorachat.modules;
 
 import club.aurorapvp.aurorachat.AuroraChat;
+import club.aurorapvp.aurorachat.util.ComponentUtil;
+import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import club.aurorapvp.aurorachat.util.TextParser;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -319,8 +313,17 @@ public class NameTag {
     if (player == null || !player.isOnline()) {
       return Component.empty();
     }
-
-    return TextParser.parseWithPlaceholders(text, player);
+    List<List<TextColor>> frameColors = displayName.getFrameColors();
+    List<TextColor> colors;
+    if (frameColors == null || frameColors.isEmpty() || nameColorFrameIndex >= frameColors.size()) {
+      colors = List.of(ExtendedTextColor.WHITE); // Default to white if null, empty, or out of bounds
+    } else {
+      colors = frameColors.get(nameColorFrameIndex);
+      if (colors == null || colors.isEmpty()) {
+        colors = List.of(ExtendedTextColor.WHITE); // Default to white if frame is null or empty
+      }
+    }
+    return TextParser.parseWithPlaceholders(text, player, colors);
   }
 
   private Set<String> extractPlaceholders(String rawText) {
@@ -338,7 +341,17 @@ public class NameTag {
       case "displayname":
         return player.displayName();
       case "coloredname":
-        return NameColor.getNameColor(player).getDisplayName();
+        List<List<TextColor>> frameColors = displayName.getFrameColors();
+        List<TextColor> colors;
+        if (frameColors == null || frameColors.isEmpty() || nameColorFrameIndex >= frameColors.size()) {
+          colors = List.of(ExtendedTextColor.WHITE); // Default to white if null, empty, or out of bounds
+        } else {
+          colors = frameColors.get(nameColorFrameIndex);
+          if (colors == null || colors.isEmpty()) {
+            colors = List.of(ExtendedTextColor.WHITE); // Default to white if frame is null or empty
+          }
+        }
+        return ComponentUtil.createGradient(player.getName(), colors);
       case "prefix":
         String prefix = ChatFormatter.chat.getPlayerPrefix(player);
         return MiniMessage.miniMessage().deserialize(prefix);
