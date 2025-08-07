@@ -12,9 +12,12 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class NameColor {
 
-  private static final Map<UUID, NameColor> PLAYER_NAME_COLORS = new HashMap<>();
+  private static final ConcurrentHashMap<UUID, NameColor> PLAYER_NAME_COLORS = new ConcurrentHashMap<>();
   private final Player player;
   private Component displayName;
   private final NameColorDataHandler data;
