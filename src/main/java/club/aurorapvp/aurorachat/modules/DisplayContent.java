@@ -77,7 +77,6 @@ public class DisplayContent {
     if (frames.isEmpty()) {
       return null;
     }
-
     return frames.get(currentFrame);
   }
 
@@ -85,55 +84,49 @@ public class DisplayContent {
     if (frames.isEmpty()) {
       return;
     }
+    currentFrame = (currentFrame + 1) % frames.size();
+  }
 
-    currentFrame = currentFrame + 1 >= frames.size() ? 0 : currentFrame + 1;
+  public List<DisplayFrame> getFrames() {
+    return frames;
+  }
+
+  public int getCurrentFrameIndex() {
+    return currentFrame;
   }
 
   public static DisplayContent createDisplayContent() {
-    ConfigurationSection section =
-        AuroraChat.getInstance().getConfig().getConfigurationSection("nametag.default");
-
-    assert section != null;
+    ConfigurationSection section = AuroraChat.getInstance().getConfig().getConfigurationSection("nametag.default");
+    if (section == null) {
+      AuroraChat.getInstance().getLogger().severe("No nametag.default section found");
+      return null;
+    }
     ConfigurationSection framesSection = section.getConfigurationSection("frames");
-
     if (framesSection == null) {
       AuroraChat.getInstance().getLogger().severe("No frames section found");
       return null;
     }
 
     DisplayContent displayContent = new DisplayContent();
-
     displayContent.setRefreshRate(section.getInt("refresh-rate", 0));
     displayContent.setSeeThrough(section.getBoolean("see-through", false));
-    displayContent.setInterpolationDelay(
-        section.getInt("interpolation-delay", displayContent.getRefreshRate()));
-    displayContent.setInterpolationDuration(
-        section.getInt("interpolation-duration", displayContent.getRefreshRate()));
-    displayContent.setViewRange(
-        section.getInt(
-            "view-range",
-            Bukkit.spigot()
-                .getSpigotConfig()
-                .getInt("world-settings.default.entity-tracking-range.players", 48)));
+    displayContent.setInterpolationDelay(section.getInt("interpolation-delay", displayContent.getRefreshRate()));
+    displayContent.setInterpolationDuration(section.getInt("interpolation-duration", displayContent.getRefreshRate()));
+    displayContent.setViewRange(section.getInt("view-range", Bukkit.spigot().getSpigotConfig().getInt("world-settings.default.entity-tracking-range.players", 48)));
 
     Display.Billboard billboard = Display.Billboard.HORIZONTAL;
     try {
-      billboard =
-          Display.Billboard.valueOf(section.getString("billboard", "horizontal").toUpperCase());
+      billboard = Display.Billboard.valueOf(section.getString("billboard", "horizontal").toUpperCase());
     } catch (IllegalArgumentException e) {
       AuroraChat.getInstance().getLogger().warning("Invalid billboard type");
     }
     displayContent.setBillboard(billboard);
 
-    framesSection
-        .getKeys(false)
-        .forEach(
-            frameName -> {
-              ConfigurationSection frameSection = framesSection.getConfigurationSection(frameName);
-
-              if (frameSection == null) {
-                return;
-              }
+    for (String frameName : framesSection.getKeys(false)) {
+      ConfigurationSection frameSection = framesSection.getConfigurationSection(frameName);
+      if (frameSection == null) {
+        continue;
+      }
 
       String text = frameSection.getString("text", null);
       String backgroundColor = frameSection.getString("background");
@@ -165,11 +158,8 @@ public class DisplayContent {
     if (hex == null) {
       return null;
     }
-
     hex = hex.substring(1);
-
     int r, g, b, a;
-
     return switch (hex.length()) {
       case 3 -> {
         r = Integer.parseInt(String.valueOf(hex.charAt(0) + hex.charAt(0)), 16);
@@ -191,9 +181,7 @@ public class DisplayContent {
         yield Color.fromARGB(a, r, g, b);
       }
       default -> {
-        AuroraChat.getInstance()
-            .getLogger()
-            .warning("Invalid hex color: " + hex + " (invalid length)");
+        AuroraChat.getInstance().getLogger().warning("Invalid hex color: " + hex + " (invalid length)");
         yield null;
       }
     };

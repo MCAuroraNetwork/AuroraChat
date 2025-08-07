@@ -35,23 +35,19 @@ public class Lang {
 
     DEFAULTS.put("prefix", "~<gradient:#FFAA00:#FF55FF><bold>AuroraChat ><reset>~");
     DEFAULTS.put("reloaded", "prefix <green>Reloaded");
-    DEFAULTS.put("message-similarity-violation",
-        "prefix <red>You're sending too many similar messages!");
-    DEFAULTS.put("cooldown-violation",
-        "prefix <red>You're sending messages too quickly!");
-    DEFAULTS.put("unknown-recipient",
-        "prefix <red>Cannot find recipient!");
-    DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s");
-    DEFAULTS.put("name-color-changed",
-        "prefix <green>Your name color has been changed to <%1$s><bold>%1$s");
-    DEFAULTS.put("player-ignored", "prefix <yellow>Marked player to be ignored");
-    DEFAULTS.put("player-unignored", "prefix <green>Marked player to be unignored");
-    DEFAULTS.put("player-already-ignored", "prefix <red>Player is already ignored");
-    DEFAULTS.put("player-not-ignored", "prefix <red>Player not ignored");
-    DEFAULTS.put("chat-disabled", "prefix <red>Chat is disabled");
-    DEFAULTS.put("unknown-color", "prefix <red>Unknown color!");
-    DEFAULTS.put("set-gradient", "prefix <green>Ready to set gradient! Run '/namecolor [color]' until you've added enough colors, then run '/namecolor done'");
-    DEFAULTS.put("color-added", "prefix <green>Color added!");
+    DEFAULTS.put("message-similarity-violation", "prefix <red>You're sending too many similar messages! ✖");
+    DEFAULTS.put("cooldown-violation", "prefix <red>You're sending messages too quickly! ⏳");
+    DEFAULTS.put("unknown-recipient", "prefix <red>Cannot find recipient! ✖");
+    DEFAULTS.put("message-format", "<yellow><bold>%1$s -> %2$s ><reset> %3$s ✉");
+    DEFAULTS.put("name-color-changed", "prefix <green>Your name color has been changed to <%1$s><bold>%1$s");
+    DEFAULTS.put("player-ignored", "prefix <yellow>Marked player to be ignored 🙈");
+    DEFAULTS.put("player-unignored", "prefix <green>Marked player to be unignored ✔");
+    DEFAULTS.put("player-already-ignored", "prefix <red>Player is already ignored ✖");
+    DEFAULTS.put("player-not-ignored", "prefix <red>Player not ignored ✖");
+    DEFAULTS.put("chat-disabled", "prefix <red>Chat is disabled ✖");
+    DEFAULTS.put("unknown-color", "prefix <red>Unknown color! ✖");
+    DEFAULTS.put("set-gradient", "prefix <green>Ready to set gradient!  Run '/namecolor [color]' until you've added enough colors, then run '/namecolor done'");
+    DEFAULTS.put("color-added", "prefix <green>Color added! ✔");
     DEFAULTS.put("gradient-set", "prefix <green>Gradient set!");
     DEFAULTS.put("help", "");
     DEFAULTS.put("help-command",

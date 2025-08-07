@@ -1,11 +1,8 @@
 package club.aurorapvp.aurorachat.modules;
 
-import club.aurorapvp.aurorachat.AuroraChat;
-import club.aurorapvp.aurorachat.data.NameColorDataHandler;
 import club.aurorapvp.aurorachat.util.ComponentUtil;
 import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
@@ -18,17 +15,18 @@ public class NameColor {
   private static final ConcurrentHashMap<UUID, NameColor> PLAYER_NAME_COLORS = new ConcurrentHashMap<>();
   private final Player player;
   private Component displayName;
-  private final NameColorDataHandler data;
+  private final DisplayName displayNameManager;
   private final List<TextColor> colors = new ArrayList<>();
   public GradientBuilder builder;
   private boolean isBuildingGradient = false;
 
-  public NameColor(Player player) {
+  private NameColor(Player player) {
     this.player = player;
-    this.data = new NameColorDataHandler(this);
+    this.displayNameManager = DisplayName.getDisplayName(player.getUniqueId());
 
-    if (data.exists()) {
-      this.reload();
+    List<List<TextColor>> frameColors = displayNameManager.getFrameColors();
+    if (!frameColors.isEmpty()) {
+      colors.addAll(frameColors.getFirst());
     } else {
       colors.add(ExtendedTextColor.WHITE);
     }
@@ -60,9 +58,7 @@ public class NameColor {
 
   public void setColor(String colorName) {
     colors.clear();
-
-    colors.add(NamedTextColor.NAMES.value(colorName));
-
+    colors.add(ExtendedTextColor.NAMES.value(colorName));
     this.updateDisplayName();
   }
 
@@ -82,62 +78,58 @@ public class NameColor {
 
   public void setColor(TextColor color) {
     colors.clear();
-
     colors.add(color);
-
     this.updateDisplayName();
   }
 
   public void setDefaultColor(TextColor color) {
     colors.clear();
-
     colors.add(color);
-
-    data.save();
-
+    List<List<TextColor>> frameColors = displayNameManager.getFrameColors();
+    if (frameColors.isEmpty()) {
+      frameColors.add(new ArrayList<>(colors));
+    } else {
+      frameColors.set(0, new ArrayList<>(colors));
+    }
+    displayNameManager.setFrameColors(frameColors);
+    displayNameManager.save();
     this.updateDisplayName();
   }
 
   public void setGradient(List<TextColor> colors) {
     this.colors.clear();
-
     this.colors.addAll(colors);
-
     this.updateDisplayName();
   }
 
   public void setDefaultGradient(List<TextColor> colors) {
     this.colors.clear();
-
     this.colors.addAll(colors);
-
-    data.save();
-
+    List<List<TextColor>> frameColors = displayNameManager.getFrameColors();
+    if (frameColors.isEmpty()) {
+      frameColors.add(new ArrayList<>(colors));
+    } else {
+      frameColors.set(0, new ArrayList<>(colors));
+    }
+    displayNameManager.setFrameColors(frameColors);
+    displayNameManager.save();
     this.updateDisplayName();
   }
 
   public void updateDisplayName() {
-    displayName =
-        ComponentUtil.createGradient(
+    displayName = ComponentUtil.createGradient(
             PlainTextComponentSerializer.plainText().serialize(player.displayName()), colors);
   }
 
   public void reload() {
-    Collection<String> colorNames = data.getColorCodes();
-
+    List<List<TextColor>> frameColors = displayNameManager.getFrameColors();
     colors.clear();
-
-    for (String hexCode : colorNames) {
-      TextColor color = TextColor.fromHexString(hexCode);
-
-      if (color != null) {
-        colors.add(color);
-      }
+    if (!frameColors.isEmpty()) {
+      colors.addAll(frameColors.get(0)); // Use first frame for NameColor
     }
 
     if (colors.isEmpty()) {
-      colors.add(NamedTextColor.WHITE);
-
+      colors.add(ExtendedTextColor.WHITE);
       this.updateDisplayName();
     }
 
@@ -159,13 +151,15 @@ public class NameColor {
     return PLAYER_NAME_COLORS.computeIfAbsent(player.getUniqueId(), k -> new NameColor(player));
   }
 
-  public class GradientBuilder {
+  public DisplayName getDisplayNameManager() {
+    return displayNameManager;
+  }
 
+  public class GradientBuilder {
     private final List<TextColor> colors = new ArrayList<>();
 
     public GradientBuilder() {
       setBuildingGradient(true);
-
       builder = this;
     }
 
@@ -176,7 +170,6 @@ public class NameColor {
 
     public List<TextColor> build() {
       setBuildingGradient(false);
-
       return colors;
     }
   }
