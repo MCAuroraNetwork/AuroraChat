@@ -3,6 +3,7 @@ package club.aurorapvp.aurorachat.modules;
 import club.aurorapvp.aurorachat.AuroraChat;
 import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -41,30 +42,33 @@ public class ChatGroup {
 
   public static void onChat(AsyncChatEvent event) {
     Player sender = event.getPlayer();
-
+    ChatGroup senderGroup = getChatGroup(sender);
     Set<Player> allowedRecipients = new HashSet<>();
 
-    ChatGroup chatGroup = chatGroups.get(sender.getUniqueId());
-
-    if (chatGroup != null && chatGroup.getMode() == ChatMode.SELECT) {
-      event.viewers().retainAll(chatGroup.getAllowedPlayers());
-
-      return;
-    }
-
-    for (ChatGroup group : chatGroups.values()) {
-      if (group.getPlayer().equals(sender)) {
-        allowedRecipients.add(group.getPlayer());
-
+    for (Player receiver : Bukkit.getOnlinePlayers()) {
+      if (receiver.equals(sender)) {
+        allowedRecipients.add(receiver);
         continue;
       }
 
-      if (group.getMode() == ChatMode.ALL && !group.getDisallowedPlayers().contains(sender)) {
-        allowedRecipients.add(group.getPlayer());
-      } else if (group.getMode() != ChatMode.DISABLED
-          && group.getAllowedPlayers().contains(sender)
-          && !group.getDisallowedPlayers().contains(sender)) {
-        allowedRecipients.add(group.getPlayer());
+      ChatGroup receiverGroup = getChatGroup(receiver);
+
+      boolean receiverAllowsSender = false;
+      if (receiverGroup.getMode() == ChatMode.ALL && !receiverGroup.getDisallowedPlayers().contains(sender)) {
+        receiverAllowsSender = true;
+      } else if (receiverGroup.getMode() != ChatMode.DISABLED
+              && receiverGroup.getAllowedPlayers().contains(sender)
+              && !receiverGroup.getDisallowedPlayers().contains(sender)) {
+        receiverAllowsSender = true;
+      }
+
+      boolean senderAllowsReceiver = true;
+      if (senderGroup.getMode() == ChatMode.SELECT) {
+        senderAllowsReceiver = senderGroup.getAllowedPlayers().contains(receiver);
+      }
+
+      if (receiverAllowsSender && senderAllowsReceiver) {
+        allowedRecipients.add(receiver);
       }
     }
 
