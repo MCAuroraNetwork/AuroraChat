@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.modules.displayname;
 
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;

@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.modules.displayname;
 
 import club.aurorapvp.aurorachat.data.DisplayNameDataHandler;
 import net.kyori.adventure.text.format.TextColor;

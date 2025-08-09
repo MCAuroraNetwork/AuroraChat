@@ -1,8 +1,8 @@
 package club.aurorapvp.aurorachat.util;
 
 import club.aurorapvp.aurorachat.AuroraChat;
-import club.aurorapvp.aurorachat.modules.ChatFormatter;
-import club.aurorapvp.aurorachat.modules.NameColor;
+import club.aurorapvp.aurorachat.modules.displayname.ChatFormatter;
+import club.aurorapvp.aurorachat.modules.displayname.NameColor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

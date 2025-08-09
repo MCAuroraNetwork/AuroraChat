@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.modules.moderation;
 
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.util.ViolationHandler;

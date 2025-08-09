@@ -1,6 +1,6 @@
 package club.aurorapvp.aurorachat.events.listeners;
 
-import club.aurorapvp.aurorachat.modules.NameTag;
+import club.aurorapvp.aurorachat.modules.displayname.NameTag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

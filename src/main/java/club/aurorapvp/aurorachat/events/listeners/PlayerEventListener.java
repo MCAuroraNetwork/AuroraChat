@@ -1,6 +1,10 @@
 package club.aurorapvp.aurorachat.events.listeners;
 
 import club.aurorapvp.aurorachat.modules.*;
+import club.aurorapvp.aurorachat.modules.displayname.ChatFormatter;
+import club.aurorapvp.aurorachat.modules.displayname.NameColor;
+import club.aurorapvp.aurorachat.modules.moderation.ChatCooldown;
+import club.aurorapvp.aurorachat.modules.moderation.SimilarMessageBlocker;
 import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.event.EventHandler;

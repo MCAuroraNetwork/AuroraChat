@@ -1,7 +1,7 @@
 package club.aurorapvp.aurorachat.data;
 
 import club.aurorapvp.aurorachat.AuroraChat;
-import club.aurorapvp.aurorachat.modules.NameColor;
+import club.aurorapvp.aurorachat.modules.displayname.NameColor;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import java.util.Arrays;

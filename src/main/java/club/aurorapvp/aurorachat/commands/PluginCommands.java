@@ -2,8 +2,8 @@ package club.aurorapvp.aurorachat.commands;
 
 import club.aurorapvp.aurorachat.AuroraChat;
 import club.aurorapvp.aurorachat.modules.AutoMessages;
-import club.aurorapvp.aurorachat.modules.ChatCooldown;
-import club.aurorapvp.aurorachat.modules.SimilarMessageBlocker;
+import club.aurorapvp.aurorachat.modules.moderation.ChatCooldown;
+import club.aurorapvp.aurorachat.modules.moderation.SimilarMessageBlocker;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;

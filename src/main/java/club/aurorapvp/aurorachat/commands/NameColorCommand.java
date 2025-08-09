@@ -1,8 +1,7 @@
 package club.aurorapvp.aurorachat.commands;
 
 import club.aurorapvp.aurorachat.AuroraChat;
-import club.aurorapvp.aurorachat.modules.NameColor;
-import club.aurorapvp.aurorachat.modules.NameColor.GradientBuilder;
+import club.aurorapvp.aurorachat.modules.displayname.NameColor;
 import club.aurorapvp.aurorachat.util.ExtendedTextColor;
 import club.aurorapvp.aurorachat.util.StringUtil;
 import co.aikar.commands.BaseCommand;

@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.modules.displayname;
 
 import club.aurorapvp.aurorachat.util.ComponentUtil;
 import club.aurorapvp.aurorachat.util.ExtendedTextColor;

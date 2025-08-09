@@ -1,4 +1,4 @@
-package club.aurorapvp.aurorachat.modules;
+package club.aurorapvp.aurorachat.modules.displayname;
 
 import club.aurorapvp.aurorachat.util.ComponentUtil;
 import club.aurorapvp.aurorachat.util.ExtendedTextColor;
@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 
 public class ChatFormatter {
 
