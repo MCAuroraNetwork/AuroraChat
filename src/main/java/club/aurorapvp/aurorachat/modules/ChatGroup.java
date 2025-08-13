@@ -10,8 +10,9 @@ import java.util.*;
 
 public class ChatGroup {
   public static Map<UUID, ChatGroup> chatGroups = new HashMap<>();
-  private final Set<Player> allowedPlayers = new HashSet<>();
+  private final Set<Player> fixedAllowedPlayers = new HashSet<>();
   private final Set<Player> disallowedPlayers = new HashSet<>();
+  private ChatTarget dynamicAllowedGroup = null;
   private final Player player;
   private ChatMode mode;
 
@@ -54,11 +55,12 @@ public class ChatGroup {
       ChatGroup receiverGroup = getChatGroup(receiver);
 
       boolean receiverAllowsSender = false;
-      if (receiverGroup.getMode() == ChatMode.ALL && !receiverGroup.getDisallowedPlayers().contains(sender)) {
+      if (receiverGroup.getMode() == ChatMode.ALL
+          && !receiverGroup.getDisallowedPlayers().contains(sender)) {
         receiverAllowsSender = true;
       } else if (receiverGroup.getMode() != ChatMode.DISABLED
-              && receiverGroup.getAllowedPlayers().contains(sender)
-              && !receiverGroup.getDisallowedPlayers().contains(sender)) {
+          && receiverGroup.getAllowedPlayers().contains(sender)
+          && !receiverGroup.getDisallowedPlayers().contains(sender)) {
         receiverAllowsSender = true;
       }
 
@@ -84,7 +86,7 @@ public class ChatGroup {
   }
 
   public void addAllowedPlayer(Player player) {
-    allowedPlayers.add(player);
+    fixedAllowedPlayers.add(player);
   }
 
   public void addDisallowedPlayer(Player player) {
@@ -92,7 +94,7 @@ public class ChatGroup {
   }
 
   public void removeAllowedPlayer(Player player) {
-    allowedPlayers.remove(player);
+    fixedAllowedPlayers.remove(player);
   }
 
   public void removeDisallowedPlayer(Player player) {
@@ -100,7 +102,7 @@ public class ChatGroup {
   }
 
   public void addAllowedPlayers(Collection<Player> players) {
-    allowedPlayers.addAll(players);
+    fixedAllowedPlayers.addAll(players);
   }
 
   public void addDisallowedPlayers(Collection<Player> players) {
@@ -108,7 +110,7 @@ public class ChatGroup {
   }
 
   public void removeAllowedPlayers(Collection<Player> players) {
-    allowedPlayers.removeAll(players);
+    fixedAllowedPlayers.removeAll(players);
   }
 
   public void removeDisallowedPlayers(Collection<Player> players) {
@@ -116,19 +118,21 @@ public class ChatGroup {
   }
 
   public void setAllowedPlayers(Collection<Player> players) {
-    allowedPlayers.clear();
-
-    allowedPlayers.addAll(players);
+    fixedAllowedPlayers.clear();
+    fixedAllowedPlayers.addAll(players);
   }
 
   public void setDisallowedPlayers(Collection<Player> players) {
     disallowedPlayers.clear();
-
     disallowedPlayers.addAll(players);
   }
 
   public Set<Player> getAllowedPlayers() {
-    return allowedPlayers;
+    if (dynamicAllowedGroup != null) {
+      return dynamicAllowedGroup.getChatMembers();
+    } else {
+      return fixedAllowedPlayers;
+    }
   }
 
   public Set<Player> getDisallowedPlayers() {
@@ -143,9 +147,22 @@ public class ChatGroup {
     return mode;
   }
 
+  public ChatTarget getAllowedGroup() {
+    return dynamicAllowedGroup;
+  }
+
+  public void setChatTarget(ChatTarget target) {
+    this.dynamicAllowedGroup = target;
+    this.mode = (target == null) ? ChatMode.ALL : ChatMode.SELECT;
+  }
+
   public enum ChatMode {
     ALL,
     SELECT,
     DISABLED
+  }
+
+  public interface ChatTarget {
+    Set<Player> getChatMembers();
   }
 }
